@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | NGO Volunteer Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-page" data-required-role="admin">
+    <header class="dashboard-header">
+        <a href="index.html" class="brand">
+            <span class="brand-icon">♥</span>
+            NGO Volunteer Connect
+        </a>
+        <div class="dashboard-actions">
+            <select id="dashboardLanguage" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+            <button id="logoutButton" class="logout-button">Sign Out</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <section class="dashboard-welcome">
+            <div>
+                <span class="dashboard-eyebrow" id="roleLabel">ADMINISTRATOR</span>
+                <h1 id="welcomeTitle">Welcome back!</h1>
+                <p id="welcomeDescription">Manage your NGO activities from one place.</p>
+            </div>
+            <div class="welcome-icon">♥</div>
+        </section>
+
+        <section class="dashboard-profile">
+            <div class="profile-avatar" id="profileAvatar">A</div>
+            <div>
+                <strong id="profileName">Loading...</strong>
+                <p id="profileEmail">Please wait...</p>
+            </div>
+            <span class="role-badge" id="profileRole">Admin</span>
+        </section>
+
+        <h2 id="modulesTitle">Management Modules</h2>
+        <section class="dashboard-grid" id="dashboardModules"></section>
+
+        <p id="dashboardMessage" class="dashboard-message" aria-live="polite"></p>
+    </main>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

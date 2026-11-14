@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance Management | NGO Volunteer Connect</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/attendance-management.css">
+</head>
+
+<body class="dashboard-page" data-required-role="admin,coordinator">
+
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-brand">
+            <div class="brand-icon">NGO</div>
+            <div>
+                <h1>NGO VOLUNTEER CONNECT</h1>
+                <p>Attendance Management</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <a href="admin-dashboard.html" id="dashboardLink"
+               class="header-link">
+                Dashboard
+            </a>
+
+            <select id="attendanceLanguage"
+                    class="language-select"
+                    aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <button type="button" id="logoutButton"
+                    class="logout-button">
+                Sign out
+            </button>
+        </div>
+    </header>
+
+    <main class="attendance-container">
+
+        <!-- Page Heading -->
+        <section class="attendance-heading">
+            <div>
+                <span class="section-eyebrow">VOLUNTEER OPERATIONS</span>
+                <h2 id="pageTitle">Attendance Management</h2>
+                <p id="pageDescription">
+                    Track volunteer participation and manage event attendance.
+                </p>
+            </div>
+
+            <button type="button" id="refreshAttendanceButton"
+                    class="refresh-button">
+                &#8635; Refresh
+            </button>
+        </section>
+
+        <!-- Feedback Message -->
+        <div id="attendanceMessage"
+             class="attendance-message"
+             role="status"
+             aria-live="polite"
+             hidden>
+        </div>
+
+        <!-- Attendance Statistics -->
+        <section class="attendance-stats">
+
+            <article class="attendance-stat-card">
+                <div class="stat-icon">📅</div>
+                <div>
+                    <p>Total Approved</p>
+                    <h3 id="totalApproved">0</h3>
+                </div>
+            </article>
+
+            <article class="attendance-stat-card">
+                <div class="stat-icon">✓</div>
+                <div>
+                    <p>Present</p>
+                    <h3 id="totalPresent">0</h3>
+                </div>
+            </article>
+
+            <article class="attendance-stat-card">
+                <div class="stat-icon">✕</div>
+                <div>
+                    <p>Absent</p>
+                    <h3 id="totalAbsent">0</h3>
+                </div>
+            </article>
+
+            <article class="attendance-stat-card">
+                <div class="stat-icon">⏱</div>
+                <div>
+                    <p>Late</p>
+                    <h3 id="totalLate">0</h3>
+                </div>
+            </article>
+
+            <article class="attendance-stat-card">
+                <div class="stat-icon">○</div>
+                <div>
+                    <p>Not Marked</p>
+                    <h3 id="totalNotMarked">0</h3>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- Event Selection -->
+        <section class="attendance-panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h3 id="eventSelectionTitle">Select Event</h3>
+                    <p>Choose an event to view its approved volunteers.</p>
+                </div>
+            </div>
+
+            <div class="attendance-toolbar">
+
+                <div class="attendance-form-group">
+                    <label for="eventSelect">Event</label>
+                    <select id="eventSelect">
+                        <option value="">Loading events...</option>
+                    </select>
+                </div>
+
+                <div class="attendance-form-group">
+                    <label for="attendanceFilter">Attendance Status</label>
+                    <select id="attendanceFilter">
+                        <option value="All">All Statuses</option>
+                        <option value="Not Marked">Not Marked</option>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Late">Late</option>
+                    </select>
+                </div>
+
+                <div class="attendance-form-group attendance-search-group">
+                    <label for="volunteerSearch">Search Volunteer</label>
+                    <input
+                        type="search"
+                        id="volunteerSearch"
+                        placeholder="Search by name or email..."
+                        autocomplete="off">
+                </div>
+
+            </div>
+
+            <!-- Selected Event Information -->
+            <div id="selectedEventInfo"
+                 class="selected-event-info"
+                 hidden>
+
+                <div>
+                    <span>EVENT</span>
+                    <strong id="selectedEventName">-</strong>
+                </div>
+
+                <div>
+                    <span>DATE</span>
+                    <strong id="selectedEventDate">-</strong>
+                </div>
+
+                <div>
+                    <span>VENUE</span>
+                    <strong id="selectedEventVenue">-</strong>
+                </div>
+
+                <div>
+                    <span>REGISTERED</span>
+                    <strong id="selectedEventRegistered">0</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Attendance Register -->
+        <section class="attendance-panel">
+
+            <div class="panel-heading attendance-table-heading">
+                <div>
+                    <h3 id="attendanceRegisterTitle">
+                        Volunteer Attendance Register
+                    </h3>
+                    <p>
+                        Attendance can be marked for approved registrations.
+                    </p>
+                </div>
+
+                <span id="volunteerCount" class="record-count">
+                    0 Volunteers
+                </span>
+            </div>
+
+            <div class="attendance-table-wrapper">
+
+                <table class="attendance-table">
+
+                    <thead>
+                        <tr>
+                            <th>Sl. No.</th>
+                            <th>Volunteer</th>
+                            <th>Email</th>
+                            <th>Registration Status</th>
+                            <th>Attendance</th>
+                            <th>Marked At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="attendanceTableBody">
+                        <tr>
+                            <td colspan="7" class="table-placeholder">
+                                Select an event to view attendance.
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="attendance-table-footer">
+                <p id="attendanceFooterMessage">
+                    Only approved volunteers are displayed.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="dashboard-footer">
+        <p>
+            NGO Volunteer Connect |
+            Volunteer Attendance Management
+        </p>
+    </footer>
+
+    <script src="js/attendance-management.js"></script>
+
+</body>
+</html>

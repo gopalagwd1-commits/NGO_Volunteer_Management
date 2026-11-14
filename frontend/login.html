@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | NGO Volunteer Connect</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body class="auth-page">
+
+    <header class="navbar">
+        <a href="index.html" class="brand">
+            <span class="brand-icon">♥</span>
+            <span>NGO Volunteer Connect</span>
+        </a>
+
+        <div class="nav-actions">
+            <select id="languageSelector" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <a href="index.html" class="nav-link" data-i18n="home">
+                Home
+            </a>
+        </div>
+    </header>
+
+    <main class="auth-container">
+
+        <section class="auth-visual">
+            <div class="visual-content">
+
+                <span class="eyebrow" data-i18n="welcomeLabel">
+                    MAKE A DIFFERENCE
+                </span>
+
+                <h1 data-i18n="welcomeHeading">
+                    Together, We Can Create a Better Tomorrow.
+                </h1>
+
+                <p data-i18n="welcomeDescription">
+                    Connect with meaningful causes, participate in
+                    community activities and make every volunteer
+                    hour count.
+                </p>
+
+                <div class="visual-stats">
+
+                    <div class="stat-card">
+                        <strong>♥</strong>
+                        <span data-i18n="statOne">
+                            Serve Communities
+                        </span>
+                    </div>
+
+                    <div class="stat-card">
+                        <strong>✦</strong>
+                        <span data-i18n="statTwo">
+                            Create Impact
+                        </span>
+                    </div>
+
+                    <div class="stat-card">
+                        <strong>✓</strong>
+                        <span data-i18n="statThree">
+                            Build Connections
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section class="auth-form-section">
+
+            <div class="auth-card">
+
+                <div class="auth-heading">
+                    <div class="auth-logo">♥</div>
+
+                    <h2 id="formTitle" data-i18n="loginTitle">
+                        Welcome Back
+                    </h2>
+
+                    <p id="formSubtitle" data-i18n="loginSubtitle">
+                        Sign in to continue to your account.
+                    </p>
+                </div>
+
+                <div id="authMessage"
+                     class="auth-message"
+                     role="alert"
+                     aria-live="polite">
+                </div>
+
+                <!-- LOGIN FORM -->
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+                        <label for="loginEmail" data-i18n="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            name="email"
+                            placeholder="Enter your email"
+                            data-i18n-placeholder="emailPlaceholder"
+                            autocomplete="username"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword" data-i18n="password">
+                            Password
+                        </label>
+
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                name="password"
+                                placeholder="Enter your password"
+                                data-i18n-placeholder="passwordPlaceholder"
+                                autocomplete="current-password"
+                                required>
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="loginPassword"
+                                aria-label="Show password">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="auth-submit"
+                            id="loginButton"
+                            data-i18n="loginButton">
+                        Sign In
+                    </button>
+
+                </form>
+
+                <!-- REGISTRATION FORM -->
+
+                <form id="registerForm" hidden>
+
+                    <div class="form-group">
+                        <label for="registerName" data-i18n="fullName">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registerName"
+                            name="name"
+                            placeholder="Enter your full name"
+                            data-i18n-placeholder="namePlaceholder"
+                            minlength="2"
+                            maxlength="100"
+                            autocomplete="name"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerEmail" data-i18n="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="registerEmail"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPhone" data-i18n="phone">
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="registerPhone"
+                            name="phone"
+                            placeholder="Enter phone number"
+                            data-i18n-placeholder="phonePlaceholder"
+                            pattern="\+?[0-9]{10,15}"
+                            autocomplete="tel"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPassword" data-i18n="password">
+                            Password
+                        </label>
+
+                        <div class="password-wrapper">
+                            <input
+                                type="password"
+                                id="registerPassword"
+                                name="password"
+                                placeholder="Minimum 8 characters"
+                                data-i18n-placeholder="passwordPlaceholder"
+                                minlength="8"
+                                autocomplete="new-password"
+                                required>
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="registerPassword"
+                                aria-label="Show password">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="auth-submit"
+                            id="registerButton"
+                            data-i18n="registerButton">
+                        Create Volunteer Account
+                    </button>
+
+                </form>
+
+                <div class="auth-switch">
+                    <span id="switchText" data-i18n="noAccount">
+                        Don't have an account?
+                    </span>
+
+                    <button type="button"
+                            id="switchAuthMode"
+                            data-i18n="registerLink">
+                        Register
+                    </button>
+                </div>
+
+                <a href="index.html"
+                   class="back-home"
+                   data-i18n="backHome">
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="js/login.js"></script>
+
+</body>
+</html>

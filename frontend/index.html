@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="NGO Volunteer Connect - Volunteer and community activity management">
+
+    <title>NGO Volunteer Connect</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a class="brand" href="index.html">
+            <span class="brand-icon">♥</span>
+            <span>NGO <strong>Volunteer Connect</strong></span>
+        </a>
+
+        <div class="nav-actions">
+            <select id="languageSelect" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <a href="#about" class="nav-link" data-i18n="about">
+                About
+            </a>
+
+            <a href="login.html" class="login-button" data-i18n="login">
+                Login
+            </a>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="eyebrow" data-i18n="tagline">
+                    Together, We Make a Difference
+                </span>
+
+                <h1 data-i18n="heading">
+                    Connect People.<br>
+                    Empower Communities.
+                </h1>
+
+                <p data-i18n="description">
+                    A smarter way to organize volunteers, manage events
+                    and measure the impact of your NGO activities.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="login.html"
+                       class="primary-button"
+                       data-i18n="getStarted">
+                        Get Started
+                    </a>
+
+                    <a href="#about"
+                       class="secondary-button"
+                       data-i18n="learnMore">
+                        Learn More
+                    </a>
+                </div>
+
+                <div class="trust-line">
+                    <span>✓</span>
+                    <span data-i18n="community">
+                        Building stronger communities through service
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="hero-visual">
+
+                <div class="visual-card main-card">
+                    <div class="visual-icon">🤝</div>
+
+                    <h2 data-i18n="volunteerTitle">
+                        Volunteer Together
+                    </h2>
+
+                    <p data-i18n="volunteerText">
+                        Every helping hand creates a better tomorrow.
+                    </p>
+
+                    <div class="visual-footer">
+                        <span class="status-dot"></span>
+                        <span data-i18n="ready">
+                            Ready to make an impact
+                        </span>
+                    </div>
+                </div>
+
+                <div class="floating-card floating-one">
+                    <span>🌱</span>
+                    <span data-i18n="growth">Community Growth</span>
+                </div>
+
+                <div class="floating-card floating-two">
+                    <span>💚</span>
+                    <span data-i18n="service">Service with Purpose</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="about-section" id="about">
+
+            <div class="section-heading">
+                <span class="eyebrow" data-i18n="platform">
+                    OUR PLATFORM
+                </span>
+
+                <h2 data-i18n="platformHeading">
+                    Everything your NGO needs
+                </h2>
+
+                <p data-i18n="platformDescription">
+                    Manage your volunteer activities through one
+                    organized digital platform.
+                </p>
+            </div>
+
+            <div class="feature-grid">
+
+                <article class="feature-card">
+                    <span class="feature-icon">👥</span>
+                    <h3 data-i18n="feature1">Volunteer Management</h3>
+                    <p data-i18n="feature1Text">
+                        Register volunteers and manage their profiles.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="feature-icon">📅</span>
+                    <h3 data-i18n="feature2">Event Scheduling</h3>
+                    <p data-i18n="feature2Text">
+                        Organize community events and activities.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h3 data-i18n="feature3">Reports and Impact</h3>
+                    <p data-i18n="feature3Text">
+                        Monitor participation and activity outcomes.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <span class="feature-icon">📩</span>
+                    <h3 data-i18n="feature4">SMS Notifications</h3>
+                    <p data-i18n="feature4Text">
+                        Keep volunteers informed about events.
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p data-i18n="footer">
+            NGO Volunteer Connect | Making a difference together.
+        </p>
+
+        <div id="backendStatus" class="backend-status">
+            Checking backend connection...
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+
+</body>
+</html>

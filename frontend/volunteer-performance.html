@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#123b50">
+
+    <title>Volunteer Performance Reports | NGO Volunteer Connect</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/performance-reports.css">
+
+    <script src="js/app.js" defer></script>
+    <script src="js/performance-reports.js" defer></script>
+</head>
+
+<body class="performance-page">
+
+    <header class="performance-header">
+        <div class="performance-brand">
+            <div class="brand-icon">NGO</div>
+            <div>
+                <h1>Volunteer Connect</h1>
+                <p>Volunteer Performance Reports</p>
+            </div>
+        </div>
+
+        <div class="performance-header-actions">
+            <select id="reportLanguage" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <a href="admin-dashboard.html"
+               id="dashboardLink"
+               class="back-button">
+                ← Dashboard
+            </a>
+
+            <button type="button" id="logoutButton">
+                Sign Out
+            </button>
+        </div>
+    </header>
+
+    <main class="performance-container">
+
+        <section class="performance-heading">
+            <div>
+                <span class="section-eyebrow" id="reportEyebrow">
+                    ANALYTICS AND REPORTING
+                </span>
+                <h2 id="pageTitle">Volunteer Performance</h2>
+                <p id="pageDescription">
+                    Review volunteer participation, event registrations,
+                    and attendance records.
+                </p>
+            </div>
+
+            <button type="button"
+                    id="downloadReportButton"
+                    class="download-button"
+                    disabled>
+                <span aria-hidden="true">↓</span>
+                <span id="downloadReportText">Download PDF</span>
+            </button>
+        </section>
+
+        <section class="report-filter-panel">
+            <div class="filter-heading">
+                <h3 id="selectVolunteerTitle">Select Volunteer</h3>
+                <p id="selectVolunteerDescription">
+                    Search and select a volunteer to generate an individual report.
+                </p>
+            </div>
+
+            <div class="filter-controls">
+                <div class="filter-search">
+                    <label for="volunteerSearch" id="searchLabel">
+                        Search Volunteer
+                    </label>
+                    <input
+                        type="search"
+                        id="volunteerSearch"
+                        placeholder="Enter name, email or phone"
+                        autocomplete="off">
+                </div>
+
+                <div class="filter-status">
+                    <label for="volunteerStatus" id="statusLabel">
+                        Volunteer Status
+                    </label>
+                    <select id="volunteerStatus">
+                        <option value="all">All Volunteers</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <button type="button"
+                        id="searchVolunteersButton"
+                        class="search-button">
+                    Search
+                </button>
+            </div>
+
+            <div id="volunteerSearchResults" class="volunteer-search-results">
+                <p class="empty-message" id="initialSearchMessage">
+                    Search for a volunteer to view their performance report.
+                </p>
+            </div>
+        </section>
+
+        <section id="reportContent" class="report-content" hidden>
+
+            <div class="selected-volunteer-panel">
+                <div class="volunteer-avatar" id="volunteerAvatar">V</div>
+
+                <div class="selected-volunteer-details">
+                    <h3 id="volunteerName">Volunteer Name</h3>
+                    <p id="volunteerEmail">Email address</p>
+                    <p id="volunteerPhone">Phone number</p>
+                </div>
+
+                <span id="volunteerStatusBadge" class="status-badge">
+                    Active
+                </span>
+            </div>
+
+            <div class="report-section-heading">
+                <div>
+                    <h3 id="statisticsTitle">Performance Overview</h3>
+                    <p id="statisticsDescription">
+                        Summary of registrations and event participation.
+                    </p>
+                </div>
+            </div>
+
+            <div class="statistics-grid">
+
+                <article class="stat-card">
+                    <div class="stat-icon registrations-icon">▤</div>
+                    <div>
+                        <p id="totalRegistrationsLabel">Total Registrations</p>
+                        <h3 id="totalRegistrations">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon approved-icon">✓</div>
+                    <div>
+                        <p id="approvedRegistrationsLabel">Approved</p>
+                        <h3 id="approvedRegistrations">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon attended-icon">★</div>
+                    <div>
+                        <p id="eventsAttendedLabel">Events Attended</p>
+                        <h3 id="eventsAttended">0</h3>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon attendance-icon">%</div>
+                    <div>
+                        <p id="attendancePercentageLabel">Attendance</p>
+                        <h3 id="attendancePercentage">0%</h3>
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="report-grid">
+
+                <section class="report-panel attendance-panel">
+                    <h3 id="attendanceTitle">Attendance Analysis</h3>
+
+                    <div class="attendance-chart">
+                        <div class="attendance-ring" id="attendanceRing">
+                            <div class="attendance-ring-content">
+                                <strong id="attendanceRingValue">0%</strong>
+                                <span id="attendanceRingLabel">Attendance</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="attendance-legend">
+                        <div>
+                            <span class="legend-dot present-dot"></span>
+                            <span id="presentLabel">Present</span>
+                            <strong id="presentCount">0</strong>
+                        </div>
+
+                        <div>
+                            <span class="legend-dot absent-dot"></span>
+                            <span id="absentLabel">Absent</span>
+                            <strong id="absentCount">0</strong>
+                        </div>
+
+                        <div>
+                            <span class="legend-dot pending-dot"></span>
+                            <span id="notMarkedLabel">Not Marked</span>
+                            <strong id="notMarkedCount">0</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="report-panel registration-panel">
+                    <h3 id="registrationSummaryTitle">
+                        Registration Summary
+                    </h3>
+
+                    <div class="summary-row">
+                        <span id="pendingLabel">Pending</span>
+                        <strong id="pendingCount">0</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span id="approvedLabel">Approved</span>
+                        <strong id="approvedCount">0</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span id="rejectedLabel">Rejected</span>
+                        <strong id="rejectedCount">0</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span id="cancelledLabel">Cancelled</span>
+                        <strong id="cancelledCount">0</strong>
+                    </div>
+                </section>
+
+            </div>
+
+            <section class="report-panel history-panel">
+                <div class="history-heading">
+                    <div>
+                        <h3 id="eventHistoryTitle">Event Participation History</h3>
+                        <p id="eventHistoryDescription">
+                            Event registrations and attendance details.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="performance-table">
+                        <thead>
+                            <tr>
+                                <th id="eventNameHeader">Event</th>
+                                <th id="eventDateHeader">Event Date</th>
+                                <th id="eventCategoryHeader">Category</th>
+                                <th id="registrationStatusHeader">Registration</th>
+                                <th id="attendanceStatusHeader">Attendance</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="performanceTableBody">
+                            <tr>
+                                <td colspan="5" class="empty-message">
+                                    No registration records found.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="report-footer">
+                <span id="reportGeneratedAt">
+                    Report generated date
+                </span>
+                <span>NGO Volunteer Connect</span>
+            </div>
+
+        </section>
+
+        <div id="reportMessage" class="report-message" role="status"></div>
+
+    </main>
+
+</body>
+</html>

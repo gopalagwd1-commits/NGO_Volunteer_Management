@@ -1,0 +1,577 @@
+
+/* =========================================
+   NGO VOLUNTEER CONNECT
+   EVENT MANAGEMENT STYLES
+========================================= */
+
+.event-management-page {
+    min-height: 100vh;
+    background: #f3f6fb;
+}
+
+.event-container {
+    width: min(1450px, 94%);
+    margin: 35px auto 60px;
+}
+
+.event-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    margin-bottom: 25px;
+    border-radius: 20px;
+    background: linear-gradient(120deg, #102a56, #176b87);
+    color: #ffffff;
+    box-shadow: 0 12px 35px rgba(16, 42, 86, 0.16);
+}
+
+.event-eyebrow {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #a9e4e7;
+}
+
+.event-heading h1 {
+    margin: 0;
+    font-size: clamp(25px, 4vw, 36px);
+    font-weight: 800;
+}
+
+.event-heading p {
+    margin: 10px 0 0;
+    color: #d9eaf3;
+}
+
+.event-heading-icon {
+    display: grid;
+    place-items: center;
+    width: 85px;
+    height: 85px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.15);
+    font-size: 43px;
+}
+
+.event-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.event-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px;
+    border-radius: 17px;
+    background: #ffffff;
+    border: 1px solid #e5eaf2;
+    box-shadow: 0 5px 20px rgba(15, 35, 70, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.event-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(15, 35, 70, 0.09);
+}
+
+.stat-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: #eaf3ff;
+    font-size: 25px;
+}
+
+.event-stat-card p {
+    margin: 0 0 7px;
+    color: #718096;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.event-stat-card h2 {
+    margin: 0;
+    color: #102a56;
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.event-panel {
+    padding: 27px;
+    margin-bottom: 25px;
+    background: #ffffff;
+    border: 1px solid #e6ebf2;
+    border-radius: 18px;
+    box-shadow: 0 5px 22px rgba(15, 35, 70, 0.04);
+    animation: eventFadeIn 0.45s ease;
+}
+
+@keyframes eventFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.panel-heading h2 {
+    margin: 0;
+    color: #152c4d;
+    font-size: 21px;
+}
+
+.panel-heading p {
+    margin: 7px 0 0;
+    color: #8190a5;
+    font-size: 13px;
+}
+
+.event-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 19px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    color: #34445c;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea,
+.event-filters input,
+.event-filters select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #dce3ed;
+    border-radius: 10px;
+    outline: none;
+    background: #fbfcfe;
+    color: #26374f;
+    font: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus,
+.event-filters input:focus,
+.event-filters select:focus {
+    border-color: #247b9a;
+    box-shadow: 0 0 0 3px rgba(36, 123, 154, 0.12);
+}
+
+.event-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.primary-button,
+.secondary-button {
+    padding: 11px 19px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.primary-button {
+    background: #176b87;
+    color: #ffffff;
+}
+
+.primary-button:hover {
+    background: #10566e;
+    transform: translateY(-2px);
+}
+
+.secondary-button {
+    background: #edf3f8;
+    color: #31445d;
+}
+
+.secondary-button:hover {
+    background: #dce8f1;
+}
+
+.primary-button:disabled,
+.secondary-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.event-filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.event-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.event-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.event-table th {
+    padding: 15px 13px;
+    background: #f2f6fa;
+    color: #52657d;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.event-table td {
+    padding: 15px 13px;
+    border-bottom: 1px solid #edf0f5;
+    color: #34445c;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.event-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.event-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.event-name {
+    color: #183a65;
+    font-weight: 700;
+}
+
+.event-category {
+    display: block;
+    margin-top: 5px;
+    color: #8794a7;
+    font-size: 11px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.status-draft {
+    background: #fff4dc;
+    color: #996500;
+}
+
+.status-published {
+    background: #e0f7eb;
+    color: #187a49;
+}
+
+.status-cancelled {
+    background: #ffe7e7;
+    color: #bd3535;
+}
+
+.status-completed {
+    background: #e8edff;
+    color: #415bb0;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.table-action {
+    padding: 7px 10px;
+    border: 0;
+    border-radius: 7px;
+    background: #edf3f8;
+    color: #24506d;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.table-action:hover {
+    background: #dceaf4;
+}
+
+.table-action.danger {
+    background: #fff0f0;
+    color: #b43c3c;
+}
+
+.table-action.danger:hover {
+    background: #ffdddd;
+}
+
+.event-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 22px;
+}
+
+.event-pagination button {
+    padding: 9px 15px;
+    border: 1px solid #dce3ed;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #334c68;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.event-pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#pageInformation {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.selected-event-name {
+    margin-bottom: 16px;
+    padding: 13px 15px;
+    border-radius: 9px;
+    background: #edf5fb;
+    color: #205475;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.event-message {
+    min-height: 24px;
+    margin-top: 15px;
+    color: #176b87;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.event-message.error {
+    color: #c03939;
+}
+
+.back-button {
+    padding: 9px 14px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.13);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* Kannada font support */
+
+html[lang="kn"] .event-management-page {
+    font-family: "Noto Sans Kannada", sans-serif;
+}
+
+/* Responsive layouts */
+
+@media (max-width: 1000px) {
+    .event-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .event-container {
+        width: 94%;
+        margin-top: 20px;
+    }
+
+    .event-heading {
+        padding: 22px;
+    }
+
+    .event-heading-icon {
+        width: 58px;
+        height: 58px;
+        font-size: 28px;
+    }
+
+    .event-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .event-stat-card {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .stat-icon {
+        width: 39px;
+        height: 39px;
+        font-size: 19px;
+    }
+
+    .event-stat-card h2 {
+        font-size: 22px;
+    }
+
+    .event-stat-card p {
+        font-size: 11px;
+    }
+
+    .event-panel {
+        padding: 18px;
+    }
+
+    .event-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-field.full-width {
+        grid-column: auto;
+    }
+
+    .event-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dashboard-header {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 420px) {
+    .event-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .event-heading-icon {
+        display: none;
+    }
+
+    .dashboard-actions {
+        flex-wrap: wrap;
+    }
+}
+
+/* =========================================
+   BACK TO DASHBOARD NAVIGATION
+========================================= */
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    min-height: 42px;
+    padding: 10px 18px;
+
+    background: #ffffff;
+    color: #145c42 !important;
+
+    border: 1px solid #d6eadf;
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+
+    white-space: nowrap;
+    cursor: pointer;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10);
+
+    transition: all 0.25s ease;
+}
+
+.back-button:hover {
+    background: #e9f7ef;
+    color: #0b4932 !important;
+    border-color: #9bcdb1;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+}
+
+.back-button:focus-visible {
+    outline: 3px solid #f5c451;
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .dashboard-actions {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .back-button {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+}

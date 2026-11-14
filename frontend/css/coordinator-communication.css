@@ -1,0 +1,229 @@
+
+/* =========================================================
+   COORDINATOR COMMUNICATION
+   NGO Volunteer Management System
+   Extends the common SMS Notifications stylesheet
+   ========================================================= */
+
+/* Main page container */
+.sms-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Page heading */
+.sms-container .sms-heading {
+    margin-bottom: 24px;
+}
+
+.sms-container .sms-heading h1 {
+    margin-bottom: 8px;
+}
+
+/* Statistics cards */
+.sms-container .sms-stat-grid {
+    margin-bottom: 28px;
+}
+
+.sms-container .sms-stat-card {
+    min-height: 115px;
+}
+
+/* Compose and history sections */
+.sms-container .sms-compose-section,
+.sms-container .sms-history-section {
+    margin-bottom: 28px;
+}
+
+/* Recipient selection */
+#volunteerSelectionGroup {
+    margin-top: 12px;
+}
+
+#volunteerSelect {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 14px;
+}
+
+#volunteerSelect:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+#selectedVolunteerCount {
+    display: inline-block;
+    margin-top: 8px;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#refreshVolunteersButton {
+    margin-top: 8px;
+}
+
+/* Form controls */
+#recipientMode,
+#smsType,
+#smsMessage {
+    width: 100%;
+}
+
+#smsMessage {
+    min-height: 130px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+#characterCount {
+    display: block;
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 12px;
+    text-align: right;
+}
+
+/* Form messages */
+#smsFormMessage,
+#historyMessage,
+#globalMessage {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#smsFormMessage:empty,
+#historyMessage:empty,
+#globalMessage:empty {
+    display: none;
+}
+
+/* Action buttons */
+#sendSMSButton {
+    min-width: 145px;
+}
+
+#clearSMSButton,
+#refreshLogsButton,
+#refreshVolunteersButton {
+    cursor: pointer;
+}
+
+/* History filters */
+#smsFilterForm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+#smsFilterForm .sms-form-group {
+    flex: 1 1 180px;
+    min-width: 150px;
+}
+
+/* History table */
+#smsTableBody td {
+    vertical-align: middle;
+}
+
+#smsTableBody td {
+    overflow-wrap: anywhere;
+}
+
+/* Status badges */
+.sms-status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.sms-status-badge.status-accepted {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.sms-status-badge.status-failed {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.sms-status-badge.status-pending {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+/* Pagination */
+#paginationInfo {
+    color: #64748b;
+    font-size: 13px;
+}
+
+#previousButton:disabled,
+#nextButton:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Loading and empty states */
+#smsTableBody .empty-state,
+#smsTableBody .loading-state {
+    padding: 25px;
+    color: #64748b;
+    text-align: center;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+    .sms-container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    #smsFilterForm {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #smsFilterForm .sms-form-group {
+        width: 100%;
+    }
+
+    #volunteerSelect {
+        min-height: 120px;
+    }
+
+    .sms-container .sms-history-section {
+        overflow-x: auto;
+    }
+
+    #smsTableBody {
+        min-width: 650px;
+    }
+}
+
+@media (max-width: 480px) {
+    #sendSMSButton,
+    #clearSMSButton {
+        width: 100%;
+    }
+
+    #smsMessage {
+        min-height: 110px;
+    }
+}

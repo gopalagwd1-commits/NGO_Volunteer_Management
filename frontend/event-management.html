@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Event Management | NGO Volunteer Connect</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/event-management.css">
+</head>
+
+<body class="dashboard-page event-management-page">
+
+    <header class="dashboard-header">
+        <a href="index.html" class="brand">
+            <span class="brand-icon">♥</span>
+            NGO Volunteer Connect
+        </a>
+
+        <div class="dashboard-actions">
+            <select id="eventLanguage" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <a href="admin-dashboard.html" id="dashboardLink" class="back-button">
+                <span aria-hidden="true">←</span>
+                <span id="dashboardLinkText">Back to Dashboard</span>
+            </a>
+
+            <button id="logoutButton" class="logout-button">
+                Sign Out
+            </button>
+        </div>
+    </header>
+
+    <main class="event-container">
+
+        <section class="event-heading">
+            <div>
+                <span class="event-eyebrow" id="pageEyebrow">
+                    NGO OPERATIONS
+                </span>
+
+                <h1 id="pageTitle">Event Management</h1>
+
+                <p id="pageDescription">
+                    Plan, organize and monitor NGO activities.
+                </p>
+            </div>
+
+            <div class="event-heading-icon">📅</div>
+        </section>
+
+        <!-- EVENT STATISTICS -->
+
+        <section class="event-stats">
+
+            <article class="event-stat-card">
+                <span class="stat-icon">📋</span>
+                <div>
+                    <p id="totalEventsLabel">Total Events</p>
+                    <h2 id="totalEvents">0</h2>
+                </div>
+            </article>
+
+            <article class="event-stat-card">
+                <span class="stat-icon">🌟</span>
+                <div>
+                    <p id="publishedEventsLabel">Published Events</p>
+                    <h2 id="publishedEvents">0</h2>
+                </div>
+            </article>
+
+            <article class="event-stat-card">
+                <span class="stat-icon">👥</span>
+                <div>
+                    <p id="registrationsLabel">Registrations</p>
+                    <h2 id="totalRegistrations">0</h2>
+                </div>
+            </article>
+
+            <article class="event-stat-card">
+                <span class="stat-icon">⏳</span>
+                <div>
+                    <p id="upcomingEventsLabel">Upcoming Events</p>
+                    <h2 id="upcomingEvents">0</h2>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- CREATE EVENT -->
+
+        <section class="event-panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h2 id="createEventTitle">Create New Event</h2>
+                    <p id="createEventDescription">
+                        Enter the details of your NGO activity.
+                    </p>
+                </div>
+            </div>
+
+            <form id="eventForm">
+
+                <input type="hidden" id="eventId">
+
+                <div class="event-form-grid">
+
+                    <div class="form-field full-width">
+                        <label for="eventTitle" id="titleLabel">
+                            Event Title *
+                        </label>
+
+                        <input type="text" id="eventTitle" maxlength="150" placeholder="Enter event title" required>
+                    </div>
+
+                    <div class="form-field full-width">
+                        <label for="eventTitleKannada" id="titleKannadaLabel">
+                            Event Title in Kannada (Optional)
+                        </label>
+
+                        <input type="text" id="eventTitleKannada" maxlength="150"
+                            placeholder="ಕನ್ನಡದಲ್ಲಿ ಕಾರ್ಯಕ್ರಮದ ಹೆಸರನ್ನು ನಮೂದಿಸಿ">
+                    </div>
+
+
+                    <div class="form-field full-width">
+                        <label for="eventDescription" id="descriptionLabel">
+                            Description *
+                        </label>
+
+                        <textarea id="eventDescription" rows="4" maxlength="3000"
+                            placeholder="Describe the event and its objectives" required></textarea>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="eventCategory" id="categoryLabel">
+                            Category *
+                        </label>
+
+                        <select id="eventCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="Education">Education</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Environment">Environment</option>
+                            <option value="Community Development">Community Development</option>
+                            <option value="Food Distribution">Food Distribution</option>
+                            <option value="Animal Welfare">Animal Welfare</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="eventVenue" id="venueLabel">
+                            Venue *
+                        </label>
+
+                        <input type="text" id="eventVenue" maxlength="200" placeholder="Enter event venue" required>
+                    </div>
+
+                    <div class="form-field full-width">
+                        <label for="eventAddress" id="addressLabel">
+                            Complete Address
+                        </label>
+
+                        <input type="text" id="eventAddress" maxlength="500" placeholder="Enter complete address">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="eventDate" id="dateLabel">
+                            Event Date *
+                        </label>
+
+                        <input type="date" id="eventDate" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="registrationDeadline" id="deadlineLabel">
+                            Registration Deadline *
+                        </label>
+
+                        <input type="date" id="registrationDeadline" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="startTime" id="startTimeLabel">
+                            Start Time *
+                        </label>
+
+                        <input type="time" id="startTime" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="endTime" id="endTimeLabel">
+                            End Time *
+                        </label>
+
+                        <input type="time" id="endTime" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="eventCapacity" id="capacityLabel">
+                            Maximum Volunteers *
+                        </label>
+
+                        <input type="number" id="eventCapacity" min="1" max="10000" value="50" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="requiredVolunteers" id="requiredLabel">
+                            Required Volunteers *
+                        </label>
+
+                        <input type="number" id="requiredVolunteers" min="1" value="10" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="eventStatus" id="statusLabel">
+                            Event Status *
+                        </label>
+
+                        <select id="eventStatus" required>
+                            <option value="Draft">Draft</option>
+                            <option value="Published">Published</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="event-form-actions">
+
+                    <button type="submit" id="saveEventButton" class="primary-button">
+                        Save Event
+                    </button>
+
+                    <button type="button" id="resetEventButton" class="secondary-button">
+                        Clear Form
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- EVENT DIRECTORY -->
+
+        <section class="event-panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h2 id="eventListTitle">Event Directory</h2>
+                    <p id="eventListDescription">
+                        View and manage all NGO events.
+                    </p>
+                </div>
+
+                <button type="button" id="refreshEventsButton" class="secondary-button">
+                    ↻ Refresh
+                </button>
+            </div>
+
+            <div class="event-filters">
+
+                <input type="search" id="eventSearch" placeholder="Search events...">
+
+                <select id="eventStatusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="Draft">Draft</option>
+                    <option value="Published">Published</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Completed">Completed</option>
+                </select>
+
+                <select id="eventCategoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="Education">Education</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Environment">Environment</option>
+                    <option value="Community Development">Community Development</option>
+                    <option value="Food Distribution">Food Distribution</option>
+                    <option value="Animal Welfare">Animal Welfare</option>
+                    <option value="Other">Other</option>
+                </select>
+
+            </div>
+
+            <div class="event-table-wrapper">
+
+                <table class="event-table">
+
+                    <thead>
+                        <tr>
+                            <th id="eventNameHeading">Event</th>
+                            <th id="eventDateHeading">Date</th>
+                            <th id="eventVenueHeading">Venue</th>
+                            <th id="eventCapacityHeading">Capacity</th>
+                            <th id="eventStatusHeading">Status</th>
+                            <th id="eventActionsHeading">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="eventTableBody">
+                        <tr>
+                            <td colspan="6">Loading events...</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="event-pagination">
+                <button type="button" id="previousPageButton" disabled>
+                    Previous
+                </button>
+
+                <span id="pageInformation">Page 1</span>
+
+                <button type="button" id="nextPageButton" disabled>
+                    Next
+                </button>
+            </div>
+
+        </section>
+
+        <!-- REGISTRATION MANAGEMENT -->
+
+        <section class="event-panel" id="registrationPanel">
+
+            <div class="panel-heading">
+                <div>
+                    <h2 id="registrationTitle">Volunteer Registrations</h2>
+                    <p id="registrationDescription">
+                        Select an event to review volunteer registrations.
+                    </p>
+                </div>
+            </div>
+
+            <div id="selectedEventName" class="selected-event-name">
+                No event selected
+            </div>
+
+            <div class="event-table-wrapper">
+
+                <table class="event-table">
+
+                    <thead>
+                        <tr>
+                            <th id="volunteerNameHeading">Volunteer</th>
+                            <th id="volunteerEmailHeading">Email</th>
+                            <th id="registrationDateHeading">Registered On</th>
+                            <th id="registrationStatusHeading">Status</th>
+                            <th id="attendanceHeading">Attendance</th>
+                            <th id="registrationActionsHeading">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="registrationTableBody">
+                        <tr>
+                            <td colspan="6">
+                                Select an event to view registrations.
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <p id="eventMessage" class="event-message" aria-live="polite"></p>
+
+    </main>
+
+    <script src="js/event-management.js"></script>
+
+</body>
+
+</html>

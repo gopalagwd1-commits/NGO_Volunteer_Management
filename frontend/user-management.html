@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Management | NGO Volunteer Connect</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/user-management.css">
+</head>
+
+<body class="dashboard-page" data-required-role="admin">
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+
+        <a href="admin-dashboard.html" class="brand">
+            <span class="brand-icon">♥</span>
+            NGO Volunteer Connect
+        </a>
+
+        <div class="dashboard-actions">
+
+            <a href="admin-dashboard.html" class="back-button" id="backLink">
+                <span aria-hidden="true">←</span>
+                <span id="backLinkText">Back to Dashboard</span>
+            </a>
+
+            <select id="dashboardLanguage" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <button id="logoutButton" class="logout-button">
+                Sign Out
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="um-container">
+
+        <!-- PAGE HEADING -->
+        <section class="um-heading">
+
+            <div>
+                <span class="um-eyebrow" id="pageEyebrow">
+                    ADMINISTRATION
+                </span>
+
+                <h1 id="pageTitle">User Management</h1>
+
+                <p id="pageDescription">
+                    Manage administrator, coordinator and volunteer accounts.
+                </p>
+            </div>
+
+            <div class="um-heading-icon">👤</div>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="um-stat-grid">
+
+            <article class="um-stat-card">
+                <div class="um-stat-icon total-icon">👥</div>
+                <div>
+                    <p id="totalLabel">Total Users</p>
+                    <h2 id="totalCount">—</h2>
+                </div>
+            </article>
+
+            <article class="um-stat-card">
+                <div class="um-stat-icon admin-icon">🛡️</div>
+                <div>
+                    <p id="adminLabel">Administrators</p>
+                    <h2 id="adminCount">—</h2>
+                </div>
+            </article>
+
+            <article class="um-stat-card">
+                <div class="um-stat-icon coordinator-icon">📋</div>
+                <div>
+                    <p id="coordinatorLabel">Coordinators</p>
+                    <h2 id="coordinatorCount">—</h2>
+                </div>
+            </article>
+
+            <article class="um-stat-card">
+                <div class="um-stat-icon volunteer-icon">🤝</div>
+                <div>
+                    <p id="volunteerLabel">Volunteers</p>
+                    <h2 id="volunteerCount">—</h2>
+                </div>
+            </article>
+
+            <article class="um-stat-card">
+                <div class="um-stat-icon active-icon">✓</div>
+                <div>
+                    <p id="activeLabel">Active Users</p>
+                    <h2 id="activeCount">—</h2>
+                </div>
+            </article>
+
+            <article class="um-stat-card">
+                <div class="um-stat-icon inactive-icon">⊘</div>
+                <div>
+                    <p id="inactiveLabel">Inactive Users</p>
+                    <h2 id="inactiveCount">—</h2>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- USER DIRECTORY -->
+        <section class="um-directory">
+
+            <div class="um-section-heading">
+
+                <div>
+                    <h2 id="directoryTitle">User Directory</h2>
+
+                    <p id="directoryDescription">
+                        Search, review and manage registered user accounts.
+                    </p>
+                </div>
+
+                <div class="um-heading-actions">
+
+                    <button type="button" id="refreshButton" class="um-refresh-button">
+                        ↻ <span id="refreshText">Refresh</span>
+                    </button>
+
+                    <button type="button" id="addUserButton" class="um-add-button">
+                        + <span id="addUserText">Add User</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTERS -->
+            <form id="filterForm" class="um-filter-bar">
+
+                <div class="um-search-box">
+                    <span aria-hidden="true">⌕</span>
+
+                    <input type="search" id="searchInput" placeholder="Search by name, email or phone"
+                        autocomplete="off">
+                </div>
+
+                <select id="roleFilter" aria-label="Filter by role">
+                    <option value="all">All Roles</option>
+                    <option value="admin">Administrator</option>
+                    <option value="coordinator">Coordinator</option>
+                    <option value="volunteer">Volunteer</option>
+                </select>
+
+                <select id="statusFilter" aria-label="Filter by account status">
+                    <option value="all">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+
+                <button type="submit" class="um-search-button" id="searchButton">
+                    Search
+                </button>
+
+            </form>
+
+
+            <p id="pageMessage" class="um-message" aria-live="polite"></p>
+
+
+            <!-- USER TABLE -->
+            <div class="um-table-wrapper">
+
+                <table class="um-table">
+
+                    <thead>
+                        <tr>
+                            <th id="thUser">User</th>
+                            <th id="thPhone">Phone</th>
+                            <th id="thRole">Role</th>
+                            <th id="thLanguage">Language</th>
+                            <th id="thJoined">Registered</th>
+                            <th id="thStatus">Status</th>
+                            <th id="thAction">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="userTableBody">
+
+                        <tr>
+                            <td colspan="7" class="um-empty-cell">
+                                Loading users...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- PAGINATION -->
+            <div class="um-pagination">
+
+                <span id="paginationInfo">Page 1 of 1</span>
+
+                <div>
+
+                    <button type="button" id="previousButton" disabled>
+                        ← <span id="previousText">Previous</span>
+                    </button>
+
+                    <button type="button" id="nextButton" disabled>
+                        <span id="nextText">Next</span> →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <p id="globalMessage" class="um-global-message" aria-live="polite"></p>
+
+    </main>
+
+
+    <!-- CREATE / EDIT USER DIALOG -->
+    <dialog id="userFormDialog" class="um-dialog">
+
+        <div class="um-dialog-header">
+
+            <div>
+                <span class="um-eyebrow" id="formEyebrow">
+                    USER ADMINISTRATION
+                </span>
+
+                <h2 id="userFormTitle">Create User Account</h2>
+            </div>
+
+            <button type="button" id="closeUserFormButton" class="um-close-button" aria-label="Close">
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="userForm">
+
+            <input type="hidden" id="userId">
+
+            <div class="um-form-grid">
+
+                <div class="um-form-group">
+                    <label for="userName" id="nameLabel">Full Name</label>
+
+                    <input type="text" id="userName" maxlength="100" minlength="2" required autocomplete="name"
+                        placeholder="Enter full name">
+                </div>
+
+
+                <div class="um-form-group" id="nameKannadaGroup" hidden>
+                    <label for="userNameKannada" id="nameKannadaLabel">
+                        Volunteer Name in Kannada (Optional)
+                    </label>
+
+                    <input type="text" id="userNameKannada" maxlength="100"
+                        placeholder="Enter volunteer name in Kannada">
+                </div>
+
+
+                <div class="um-form-group">
+                    <label for="userEmail" id="emailLabel">Email Address</label>
+
+                    <input type="email" id="userEmail" maxlength="150" required autocomplete="email"
+                        placeholder="Enter email address">
+                </div>
+
+
+                <div class="um-form-group">
+                    <label for="userPhone" id="phoneLabel">Phone Number</label>
+
+                    <input type="tel" id="userPhone" required autocomplete="tel" placeholder="Enter phone number">
+                </div>
+
+
+                <div class="um-form-group">
+                    <label for="userRole" id="roleLabel">User Role</label>
+
+                    <select id="userRole" required>
+                        <option value="coordinator">Coordinator</option>
+                        <option value="volunteer">Volunteer</option>
+                    </select>
+                </div>
+
+
+                <div class="um-form-group" id="passwordGroup">
+
+                    <label for="userPassword" id="passwordLabel">
+                        Initial Password
+                    </label>
+
+                    <input type="password" id="userPassword" minlength="8" autocomplete="new-password"
+                        placeholder="Minimum 8 characters">
+
+                    <small id="passwordHelp">
+                        Password must contain at least 8 characters.
+                    </small>
+
+                </div>
+
+
+                <div class="um-form-group">
+
+                    <label for="userLanguage" id="languageLabel">
+                        Preferred Language
+                    </label>
+
+                    <select id="userLanguage">
+                        <option value="en">English</option>
+                        <option value="kn">Kannada</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <p id="formMessage" class="um-form-message" aria-live="polite"></p>
+
+
+            <div class="um-dialog-actions">
+
+                <button type="button" id="cancelUserFormButton" class="um-cancel-button">
+                    Cancel
+                </button>
+
+                <button type="submit" id="saveUserButton" class="um-save-button">
+                    Create Account
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+
+    <!-- USER PROFILE DIALOG -->
+    <dialog id="userProfileDialog" class="um-dialog">
+
+        <div class="um-dialog-header">
+
+            <div>
+                <span class="um-eyebrow" id="profileEyebrow">
+                    USER DETAILS
+                </span>
+
+                <h2 id="profileDialogTitle">User Profile</h2>
+            </div>
+
+            <button type="button" id="closeProfileButton" class="um-close-button" aria-label="Close">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="um-profile-identity">
+
+            <div class="um-profile-avatar" id="profileAvatar">
+                U
+            </div>
+
+            <div>
+                <h3 id="profileName">—</h3>
+                <p id="profileEmail">—</p>
+            </div>
+
+        </div>
+
+
+        <div class="um-profile-details">
+
+            <div>
+                <span id="profilePhoneLabel">Phone Number</span>
+                <strong id="profilePhone">—</strong>
+            </div>
+
+            <div>
+                <span id="profileRoleLabel">User Role</span>
+                <strong id="profileRole">—</strong>
+            </div>
+
+            <div>
+                <span id="profileLanguageLabel">Preferred Language</span>
+                <strong id="profileLanguage">—</strong>
+            </div>
+
+            <div>
+                <span id="profileStatusLabel">Account Status</span>
+                <strong id="profileStatus">—</strong>
+            </div>
+
+            <div>
+                <span id="profileJoinedLabel">Registration Date</span>
+                <strong id="profileJoined">—</strong>
+            </div>
+
+            <div>
+                <span id="profileLoginLabel">Last Login</span>
+                <strong id="profileLastLogin">—</strong>
+            </div>
+
+        </div>
+
+
+        <div class="um-dialog-actions">
+
+            <button type="button" id="profileStatusButton" class="um-status-button">
+                Deactivate Account
+            </button>
+
+            <button type="button" id="profileEditButton" class="um-save-button">
+                Edit User
+            </button>
+
+            <button type="button" id="profileDoneButton" class="um-cancel-button">
+                Close
+            </button>
+
+        </div>
+
+    </dialog>
+
+
+    <script src="js/user-management.js"></script>
+
+</body>
+
+</html>

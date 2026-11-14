@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SMS Notifications | NGO Volunteer Connect</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/sms-notifications.css">
+</head>
+
+<body class="dashboard-page" data-required-role="admin">
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+
+        <a href="admin-dashboard.html" class="brand">
+            <span class="brand-icon">♥</span>
+            NGO Volunteer Connect
+        </a>
+
+        <div class="dashboard-actions">
+
+            <a href="admin-dashboard.html" class="back-button" id="backLink">
+                <span aria-hidden="true">←</span>
+                <span id="backLinkText">Back to Dashboard</span>
+            </a>
+
+            <select id="dashboardLanguage" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <button id="logoutButton" class="logout-button">
+                Sign Out
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="sms-container">
+
+        <!-- PAGE HEADING -->
+        <section class="sms-heading">
+
+            <div>
+                <span class="sms-eyebrow" id="pageEyebrow">
+                    COMMUNICATION
+                </span>
+
+                <h1 id="pageTitle">SMS Notifications</h1>
+
+                <p id="pageDescription">
+                    Send announcements and notifications to NGO volunteers.
+                </p>
+            </div>
+
+            <div class="sms-heading-icon">✉</div>
+
+        </section>
+
+
+        <!-- GATEWAY STATUS -->
+        <section class="sms-gateway-card">
+
+            <div class="sms-gateway-info">
+
+                <div class="sms-gateway-icon">📡</div>
+
+                <div>
+                    <h2 id="gatewayTitle">TextBee Gateway</h2>
+
+                    <p id="gatewayDescription">
+                        SMS gateway connection status
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="sms-gateway-status">
+
+                <span id="gatewayStatusIndicator" class="sms-status-indicator">
+                </span>
+
+                <strong id="gatewayStatusText">
+                    Checking...
+                </strong>
+
+                <button type="button" id="refreshStatusButton"
+                    class="sms-refresh-button">
+                    ↻ <span id="refreshStatusText">Refresh</span>
+                </button>
+
+            </div>
+
+            <p id="gatewayMessage" class="sms-gateway-message"
+                aria-live="polite"></p>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="sms-stat-grid">
+
+            <article class="sms-stat-card">
+                <div class="sms-stat-icon total-icon">✉</div>
+                <div>
+                    <p id="totalLabel">Total Messages</p>
+                    <h2 id="totalCount">—</h2>
+                </div>
+            </article>
+
+            <article class="sms-stat-card">
+                <div class="sms-stat-icon accepted-icon">✓</div>
+                <div>
+                    <p id="acceptedLabel">Accepted Messages</p>
+                    <h2 id="acceptedCount">—</h2>
+                </div>
+            </article>
+
+            <article class="sms-stat-card">
+                <div class="sms-stat-icon failed-icon">!</div>
+                <div>
+                    <p id="failedLabel">Failed Messages</p>
+                    <h2 id="failedCount">—</h2>
+                </div>
+            </article>
+
+            <article class="sms-stat-card">
+                <div class="sms-stat-icon recipients-icon">👥</div>
+                <div>
+                    <p id="recipientsLabel">Total Recipients</p>
+                    <h2 id="recipientsCount">—</h2>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- COMPOSE SMS -->
+        <section class="sms-compose-section">
+
+            <div class="sms-section-heading">
+
+                <div>
+                    <h2 id="composeTitle">Compose SMS</h2>
+
+                    <p id="composeDescription">
+                        Send an SMS to one or multiple recipients.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form id="smsForm">
+
+                <div class="sms-form-grid">
+
+                    <div class="sms-form-group sms-full-width">
+
+                        <label for="recipientMode" id="recipientModeLabel">
+                            Recipient Selection
+                        </label>
+
+                        <select id="recipientMode">
+                            <option value="manual">Enter Phone Numbers</option>
+                        </select>
+
+                        <small id="recipientModeHelp">
+                            Enter one or more phone numbers separated by commas or new lines.
+                        </small>
+
+                    </div>
+
+
+                    <div class="sms-form-group sms-full-width">
+
+                        <label for="recipients" id="recipientsInputLabel">
+                            Recipient Phone Numbers
+                        </label>
+
+                        <textarea
+                            id="recipients"
+                            rows="4"
+                            maxlength="2000"
+                            placeholder="Example: +919876543210, +919876543211"
+                            required></textarea>
+
+                        <small id="recipientCount">
+                            0 recipients
+                        </small>
+
+                    </div>
+
+
+                    <div class="sms-form-group">
+
+                        <label for="smsType" id="smsTypeLabel">
+                            Notification Type
+                        </label>
+
+                        <select id="smsType" required>
+                            <option value="Manual">Manual</option>
+                            <option value="Announcement">Announcement</option>
+                            <option value="Registration">Registration</option>
+                            <option value="Event Reminder">Event Reminder</option>
+                            <option value="Event Cancellation">Event Cancellation</option>
+                            <option value="Attendance">Attendance</option>
+                            <option value="System">System</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="sms-form-group">
+
+                        <label id="messageLengthLabel">
+                            Message Limit
+                        </label>
+
+                        <div class="sms-character-limit">
+                            <span id="characterCount">0</span> / 5000
+                        </div>
+
+                    </div>
+
+
+                    <div class="sms-form-group sms-full-width">
+
+                        <label for="smsMessage" id="smsMessageLabel">
+                            SMS Message
+                        </label>
+
+                        <textarea
+                            id="smsMessage"
+                            rows="6"
+                            maxlength="5000"
+                            placeholder="Enter your SMS message here..."
+                            required></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <p id="smsFormMessage" class="sms-form-message"
+                    aria-live="polite"></p>
+
+
+                <div class="sms-compose-actions">
+
+                    <button type="reset" id="clearSMSButton"
+                        class="sms-clear-button">
+                        Clear
+                    </button>
+
+                    <button type="submit" id="sendSMSButton"
+                        class="sms-send-button">
+                        ✉ <span id="sendSMSText">Send SMS</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- SMS HISTORY -->
+        <section class="sms-history-section">
+
+            <div class="sms-section-heading">
+
+                <div>
+                    <h2 id="historyTitle">SMS History</h2>
+
+                    <p id="historyDescription">
+                        Review previously submitted SMS notifications.
+                    </p>
+                </div>
+
+                <button type="button" id="refreshLogsButton"
+                    class="sms-refresh-button">
+                    ↻ <span id="refreshLogsText">Refresh</span>
+                </button>
+
+            </div>
+
+
+            <!-- FILTERS -->
+            <form id="smsFilterForm" class="sms-filter-bar">
+
+                <select id="statusFilter" aria-label="Filter by status">
+                    <option value="">All Statuses</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Failed">Failed</option>
+                </select>
+
+                <select id="typeFilter" aria-label="Filter by type">
+                    <option value="">All Types</option>
+                    <option value="Manual">Manual</option>
+                    <option value="Announcement">Announcement</option>
+                    <option value="Registration">Registration</option>
+                    <option value="Event Reminder">Event Reminder</option>
+                    <option value="Event Cancellation">Event Cancellation</option>
+                    <option value="Attendance">Attendance</option>
+                    <option value="System">System</option>
+                </select>
+
+                <button type="submit" class="sms-search-button"
+                    id="filterButton">
+                    Filter
+                </button>
+
+            </form>
+
+
+            <p id="historyMessage" class="sms-history-message"
+                aria-live="polite"></p>
+
+
+            <!-- HISTORY TABLE -->
+            <div class="sms-table-wrapper">
+
+                <table class="sms-table">
+
+                    <thead>
+                        <tr>
+                            <th id="thDate">Date</th>
+                            <th id="thType">Type</th>
+                            <th id="thRecipients">Recipients</th>
+                            <th id="thMessage">Message</th>
+                            <th id="thStatus">Status</th>
+                            <th id="thSentBy">Sent By</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="smsTableBody">
+
+                        <tr>
+                            <td colspan="6" class="sms-empty-cell">
+                                Loading SMS history...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- PAGINATION -->
+            <div class="sms-pagination">
+
+                <span id="paginationInfo">
+                    Page 1 of 1
+                </span>
+
+                <div>
+
+                    <button type="button" id="previousButton" disabled>
+                        ← <span id="previousText">Previous</span>
+                    </button>
+
+                    <button type="button" id="nextButton" disabled>
+                        <span id="nextText">Next</span> →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <p id="globalMessage" class="sms-global-message"
+            aria-live="polite"></p>
+
+    </main>
+
+
+    <script src="js/sms-notifications.js"></script>
+
+</body>
+
+</html>

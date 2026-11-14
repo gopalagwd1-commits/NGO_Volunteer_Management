@@ -1,0 +1,388 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Coordinator Communication | NGO Volunteer Connect</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/sms-notifications.css">
+    <link rel="stylesheet" href="css/coordinator-communication.css">
+</head>
+
+<body class="dashboard-page" data-required-role="coordinator">
+
+    <header class="dashboard-header">
+
+        <a href="coordinator-dashboard.html" class="brand">
+            <span class="brand-icon">♥</span>
+            NGO Volunteer Connect
+        </a>
+
+        <div class="dashboard-actions">
+
+            <a href="coordinator-dashboard.html" class="back-button">
+                <span aria-hidden="true">←</span>
+                Back to Dashboard
+            </a>
+
+            <select id="dashboardLanguage" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <button id="logoutButton" class="logout-button">
+                Sign Out
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="sms-container">
+
+        <section class="sms-heading">
+
+            <div>
+                <span class="sms-eyebrow">COORDINATOR WORKSPACE</span>
+
+                <h1>Volunteer Communication</h1>
+
+                <p>
+                    Send messages to selected volunteers or announce
+                    important updates to all active volunteers.
+                </p>
+            </div>
+
+            <div class="sms-heading-icon" aria-hidden="true">✉</div>
+
+        </section>
+
+
+        <!-- SMS STATISTICS -->
+
+        <section class="sms-stat-grid">
+
+            <article class="sms-stat-card">
+                <div class="sms-stat-icon total-icon">✉</div>
+                <div>
+                    <p>Total Messages</p>
+                    <h2 id="totalCount">—</h2>
+                </div>
+            </article>
+
+            <article class="sms-stat-card">
+                <div class="sms-stat-icon accepted-icon">✓</div>
+                <div>
+                    <p>Accepted Messages</p>
+                    <h2 id="acceptedCount">—</h2>
+                </div>
+            </article>
+
+            <article class="sms-stat-card">
+                <div class="sms-stat-icon failed-icon">!</div>
+                <div>
+                    <p>Failed Messages</p>
+                    <h2 id="failedCount">—</h2>
+                </div>
+            </article>
+
+            <article class="sms-stat-card">
+                <div class="sms-stat-icon recipients-icon">👥</div>
+                <div>
+                    <p>Total Recipients</p>
+                    <h2 id="recipientsCount">—</h2>
+                </div>
+            </article>
+
+        </section>
+
+
+        <!-- COMPOSE MESSAGE -->
+
+        <section class="sms-compose-section">
+
+            <div class="sms-section-heading">
+                <div>
+                    <h2>Compose Message</h2>
+                    <p>Choose your audience and write your SMS.</p>
+                </div>
+            </div>
+
+
+            <form id="smsForm">
+
+                <div class="sms-form-grid">
+
+                    <div class="sms-form-group sms-full-width">
+
+                        <label for="recipientMode">
+                            Recipient Selection
+                        </label>
+
+                        <select id="recipientMode" required>
+                            <option value="selected">
+                                Selected Volunteers
+                            </option>
+
+                            <option value="all_active">
+                                All Active Volunteers
+                            </option>
+                        </select>
+
+                        <small>
+                            All-active announcements are sent only to
+                            active volunteers with registered phone numbers.
+                        </small>
+
+                    </div>
+
+
+                    <div
+                        class="sms-form-group sms-full-width"
+                        id="volunteerSelectionGroup">
+
+                        <div class="volunteer-selection-heading">
+                            <label for="volunteerSelect">
+                                Select Volunteers
+                            </label>
+
+                            <button
+                                type="button"
+                                id="refreshVolunteersButton"
+                                class="sms-refresh-button">
+                                Refresh Volunteers
+                            </button>
+                        </div>
+
+                        <select
+                            id="volunteerSelect"
+                            multiple
+                            size="7"
+                            aria-describedby="volunteerHelp">
+                        </select>
+
+                        <small id="volunteerHelp">
+                            Hold Ctrl (Windows) while clicking to select
+                            multiple volunteers.
+                        </small>
+
+                        <small id="selectedVolunteerCount">
+                            0 volunteers selected
+                        </small>
+
+                    </div>
+
+
+                    <div class="sms-form-group">
+
+                        <label for="smsType">
+                            Notification Type
+                        </label>
+
+                        <select id="smsType" required>
+                            <option value="Manual">Manual</option>
+                            <option value="Announcement">Announcement</option>
+                            <option value="Registration">Registration</option>
+                            <option value="Event Reminder">Event Reminder</option>
+                            <option value="Event Cancellation">Event Cancellation</option>
+                            <option value="Attendance">Attendance</option>
+                            <option value="System">System</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="sms-form-group">
+
+                        <label>Message Length</label>
+
+                        <div class="sms-character-limit">
+                            <span id="characterCount">0</span> / 5000
+                        </div>
+
+                    </div>
+
+
+                    <div class="sms-form-group sms-full-width">
+
+                        <label for="smsMessage">
+                            SMS Message
+                        </label>
+
+                        <textarea
+                            id="smsMessage"
+                            rows="6"
+                            maxlength="5000"
+                            placeholder="Enter your message here..."
+                            required></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <p
+                    id="smsFormMessage"
+                    class="sms-form-message"
+                    aria-live="polite">
+                </p>
+
+
+                <div class="sms-compose-actions">
+
+                    <button
+                        type="reset"
+                        id="clearSMSButton"
+                        class="sms-clear-button">
+                        Clear
+                    </button>
+
+                    <button
+                        type="submit"
+                        id="sendSMSButton"
+                        class="sms-send-button">
+                        ✉ <span id="sendSMSText">Send SMS</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- SMS HISTORY -->
+
+        <section class="sms-history-section">
+
+            <div class="sms-section-heading">
+
+                <div>
+                    <h2>My Communication History</h2>
+
+                    <p>
+                        Review messages sent from your coordinator account.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    id="refreshLogsButton"
+                    class="sms-refresh-button">
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <form id="smsFilterForm" class="sms-filter-bar">
+
+                <select id="statusFilter" aria-label="Filter by status">
+                    <option value="">All Statuses</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Failed">Failed</option>
+                </select>
+
+                <select id="typeFilter" aria-label="Filter by type">
+                    <option value="">All Types</option>
+                    <option value="Manual">Manual</option>
+                    <option value="Announcement">Announcement</option>
+                    <option value="Registration">Registration</option>
+                    <option value="Event Reminder">Event Reminder</option>
+                    <option value="Event Cancellation">Event Cancellation</option>
+                    <option value="Attendance">Attendance</option>
+                    <option value="System">System</option>
+                </select>
+
+                <button
+                    type="submit"
+                    id="filterButton"
+                    class="sms-search-button">
+                    Filter
+                </button>
+
+            </form>
+
+
+            <p
+                id="historyMessage"
+                class="sms-history-message"
+                aria-live="polite">
+            </p>
+
+
+            <div class="sms-table-wrapper">
+
+                <table class="sms-table">
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Recipients</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="smsTableBody">
+
+                        <tr>
+                            <td colspan="5" class="sms-empty-cell">
+                                Loading communication history...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="sms-pagination">
+
+                <span id="paginationInfo">
+                    Page 1 of 1
+                </span>
+
+                <div>
+
+                    <button type="button" id="previousButton" disabled>
+                        ← Previous
+                    </button>
+
+                    <button type="button" id="nextButton" disabled>
+                        Next →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <p
+            id="globalMessage"
+            class="sms-global-message"
+            aria-live="polite">
+        </p>
+
+    </main>
+
+
+    <script src="js/coordinator-communication.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Management | NGO Volunteer Connect</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/volunteer-management.css">
+</head>
+
+<body class="dashboard-page" data-required-role="admin">
+
+    <header class="dashboard-header">
+        <a href="admin-dashboard.html" class="brand">
+            <span class="brand-icon">♥</span>
+            NGO Volunteer Connect
+        </a>
+
+        <div class="dashboard-actions">
+            <a href="admin-dashboard.html" class="back-button" id="backLink">
+                <span aria-hidden="true">←</span>
+                <span>Back to Dashboard</span>
+            </a>
+
+            <select id="dashboardLanguage" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+
+            <button id="logoutButton" class="logout-button">Sign Out</button>
+        </div>
+    </header>
+
+    <main class="vm-container">
+
+        <section class="vm-heading">
+            <div>
+                <span class="vm-eyebrow" id="pageEyebrow">ADMINISTRATION</span>
+                <h1 id="pageTitle">Volunteer Management</h1>
+                <p id="pageDescription">
+                    Manage registered volunteers, review profiles and control account status.
+                </p>
+            </div>
+
+            <div class="vm-heading-icon">👥</div>
+        </section>
+
+        <section class="vm-stat-grid">
+
+            <article class="vm-stat-card">
+                <div class="vm-stat-icon total-icon">👥</div>
+                <div>
+                    <p id="totalLabel">Total Volunteers</p>
+                    <h2 id="totalCount">—</h2>
+                </div>
+            </article>
+
+            <article class="vm-stat-card">
+                <div class="vm-stat-icon active-icon">✓</div>
+                <div>
+                    <p id="activeLabel">Active Volunteers</p>
+                    <h2 id="activeCount">—</h2>
+                </div>
+            </article>
+
+            <article class="vm-stat-card">
+                <div class="vm-stat-icon inactive-icon">⊘</div>
+                <div>
+                    <p id="inactiveLabel">Inactive Volunteers</p>
+                    <h2 id="inactiveCount">—</h2>
+                </div>
+            </article>
+
+        </section>
+
+        <section class="vm-directory">
+
+            <div class="vm-section-heading">
+                <div>
+                    <h2 id="directoryTitle">Volunteer Directory</h2>
+                    <p id="directoryDescription">
+                        Search and manage registered volunteer accounts.
+                    </p>
+                </div>
+
+                <button type="button" id="refreshButton" class="vm-refresh-button">
+                    ↻ <span id="refreshText">Refresh</span>
+                </button>
+            </div>
+
+            <form id="filterForm" class="vm-filter-bar">
+
+                <div class="vm-search-box">
+                    <span>⌕</span>
+                    <input type="search" id="searchInput" placeholder="Search by name, email or phone"
+                        autocomplete="off">
+                </div>
+
+                <select id="statusFilter" aria-label="Filter by status">
+                    <option value="all">All Volunteers</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+
+                <button type="submit" class="vm-search-button" id="searchButton">
+                    Search
+                </button>
+
+            </form>
+
+            <p id="pageMessage" class="vm-message" aria-live="polite"></p>
+
+            <div class="vm-table-wrapper">
+                <table class="vm-table">
+                    <thead>
+                        <tr>
+                            <th id="thVolunteer">Volunteer</th>
+                            <th id="thPhone">Phone</th>
+                            <th id="thLanguage">Language</th>
+                            <th id="thJoined">Registered</th>
+                            <th id="thStatus">Status</th>
+                            <th id="thAction">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="volunteerTableBody">
+                        <tr>
+                            <td colspan="6" class="vm-empty-cell">
+                                Loading volunteers...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="vm-pagination">
+                <span id="paginationInfo">Page 1</span>
+
+                <div>
+                    <button type="button" id="previousButton" disabled>
+                        ← <span id="previousText">Previous</span>
+                    </button>
+
+                    <button type="button" id="nextButton" disabled>
+                        <span id="nextText">Next</span> →
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <p id="globalMessage" class="vm-global-message" aria-live="polite"></p>
+
+    </main>
+
+    <dialog id="profileDialog" class="vm-dialog">
+
+        <div class="vm-dialog-header">
+            <div>
+                <span class="vm-eyebrow" id="profileEyebrow">VOLUNTEER DETAILS</span>
+                <h2 id="profileDialogTitle">Volunteer Profile</h2>
+            </div>
+
+            <button type="button" id="closeProfileButton" class="vm-close-button" aria-label="Close">
+                ×
+            </button>
+        </div>
+
+        <div class="vm-profile-identity">
+            <div class="vm-profile-avatar" id="profileAvatar">V</div>
+            <div>
+                <h3 id="profileName">—</h3>
+                <p id="profileEmail">—</p>
+            </div>
+        </div>
+
+        <div class="vm-profile-details">
+
+            <div>
+                <span id="profilePhoneLabel">Phone Number</span>
+                <strong id="profilePhone">—</strong>
+            </div>
+
+            <div>
+                <span id="profileLanguageLabel">Preferred Language</span>
+                <strong id="profileLanguage">—</strong>
+            </div>
+
+            <div>
+                <span id="profileStatusLabel">Account Status</span>
+                <strong id="profileStatus">—</strong>
+            </div>
+
+            <div>
+                <span id="profileJoinedLabel">Registration Date</span>
+                <strong id="profileJoined">—</strong>
+            </div>
+
+            <div>
+                <span id="profileLoginLabel">Last Login</span>
+                <strong id="profileLastLogin">—</strong>
+            </div>
+
+        </div>
+
+        <div class="vm-dialog-actions">
+            <button type="button" id="profileStatusButton" class="vm-status-button">
+                Change Status
+            </button>
+
+            <button type="button" id="profileDoneButton" class="vm-done-button">
+                Close
+            </button>
+        </div>
+
+    </dialog>
+
+    <script src="js/volunteer-management.js"></script>
+
+</body>
+
+</html>
