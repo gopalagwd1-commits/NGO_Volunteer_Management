@@ -3,6 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const User = require("../models/User");
+const SMSLog = require("../models/SMSLog");
+const { sendSMS } = require("../services/smsService");
 
 const {
     requireAuth,
@@ -18,6 +20,37 @@ const router = express.Router();
 
 const SAFE_USER_FIELDS =
     "name nameKannada email phone role isActive preferredLanguage createdAt updatedAt lastLogin";
+
+
+async function sendAndLogSMS(recipients, message, type, sentBy) {
+    try {
+        const result = await sendSMS(recipients, message);
+
+        try {
+            await SMSLog.create({
+                recipients,
+                message,
+                type,
+                status: result.success ? "Accepted" : "Failed",
+                smsBatchId: result.smsBatchId || null,
+                errorMessage: result.success ? "" : result.error || "SMS failed",
+                recipientCount: recipients.length,
+                sentBy: sentBy || null
+            });
+        } catch (logError) {
+            console.error("SMS log creation failed:", logError.message);
+        }
+
+        return result;
+
+    } catch (error) {
+        console.error("SMS notification failed:", error.message);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
 
 // Validate phone number
 function isValidPhone(phone) {
@@ -318,35 +351,59 @@ router.post(
             // User model pre-save hook hashes the password.
             await user.save();
 
-            return res.status(201).json({
-                success: true,
-                message: "User account created successfully.",
-                user: formatUser(user)
-            });
 
-        } catch (error) {
-            console.error("Create User Error:", error);
+            // Send account creation SMS notification.
+const smsPhone = String(user.phone || "").trim();
 
-            if (error.code === 11000) {
-                return res.status(409).json({
+if (smsPhone) {
+    const isKannada = user.preferredLanguage === "kn";
+
+    const roleName = user.role === "coordinator"
+        ? (isKannada ? "ಸಂಯೋಜಕರು" : "Coordinator")
+        : (isKannada ? "ಸ್ವಯಂಸೇವಕರು" : "Volunteer");
+
+    const message = isKannada
+        ? `ನಮಸ್ಕಾರ ${user.name}, NGO Volunteer Management System ನಲ್ಲಿ ನಿಮ್ಮ ${roleName} ಖಾತೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ನೋಂದಾಯಿತ ಇಮೇಲ್ ಬಳಸಿ ಲಾಗಿನ್ ಮಾಡಿ. ಧನ್ಯವಾದಗಳು.`
+        : `Hello ${user.name}, your ${roleName} account has been successfully created in the NGO Volunteer Management System. Please log in using your registered email. Thank you.`;
+
+    await sendAndLogSMS(
+        [smsPhone],
+        message,
+        "Registration",
+        req.user._id
+    );
+}
+
+// Return successful account creation response.
+return res.status(201).json({
+    success: true,
+    message: "User account created successfully.",
+    user: formatUser(user)
+});
+
+            } catch (error) {
+                console.error("Create User Error:", error);
+
+                if (error.code === 11000) {
+                    return res.status(409).json({
+                        success: false,
+                        message: "An account with this email already exists."
+                    });
+                }
+
+                if (error.name === "ValidationError") {
+                    return res.status(400).json({
+                        success: false,
+                        message: error.message
+                    });
+                }
+
+                return res.status(500).json({
                     success: false,
-                    message: "An account with this email already exists."
+                    message: "Unable to create user account."
                 });
             }
-
-            if (error.name === "ValidationError") {
-                return res.status(400).json({
-                    success: false,
-                    message: error.message
-                });
-            }
-
-            return res.status(500).json({
-                success: false,
-                message: "Unable to create user account."
-            });
         }
-    }
 );
 
 

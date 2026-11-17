@@ -555,13 +555,23 @@ function resetForm() {
     applyTranslations();
 }
 
+let isSavingEvent = false;
+
+
 async function saveEvent(event) {
     event.preventDefault();
+
+    // Prevent repeated submissions.
+    if (isSavingEvent) {
+        return;
+    }
 
     const button = document.getElementById("saveEventButton");
     const originalText = button.textContent;
 
+    isSavingEvent = true;
     button.disabled = true;
+    button.textContent = "Saving...";
 
     try {
         const data = validateForm(getFormData());
@@ -586,19 +596,26 @@ async function saveEvent(event) {
         await loadPage();
 
     } catch (error) {
-        showMessage(error.message || t("saveError"), true);
+        showMessage(
+            error.message || t("saveError"),
+            true
+        );
+
     } finally {
+        isSavingEvent = false;
         button.disabled = false;
         button.textContent = originalText;
+
         applyTranslations();
     }
 }
+
 
 function populateEditForm(event) {
     document.getElementById("eventId").value = event._id;
     document.getElementById("eventTitle").value = event.title;
     document.getElementById("eventTitleKannada").value =
-    event.titleKannada || "";
+        event.titleKannada || "";
     document.getElementById("eventDescription").value = event.description;
     document.getElementById("eventCategory").value = event.category;
     document.getElementById("eventVenue").value = event.venue;

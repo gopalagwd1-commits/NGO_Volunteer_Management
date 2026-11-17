@@ -149,6 +149,18 @@ const eventSchema = new mongoose.Schema(
             default: "Draft"
         },
 
+                // Unique key used to prevent duplicate event creation.
+        eventKey: {
+            type: String,
+            default: undefined
+        },
+
+        // Atomic announcement protection.
+        announcementClaimedAt: {
+            type: Date,
+            default: null
+        },
+
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
@@ -184,6 +196,14 @@ eventSchema.index({
     createdBy: 1
 });
 
+// Prevent duplicate events with the same title, date and venue.
+eventSchema.index(
+    { eventKey: 1 },
+    {
+        unique: true,
+        sparse: true
+    }
+);
 
 // --------------------------------------------------
 // PRE-VALIDATION MIDDLEWARE

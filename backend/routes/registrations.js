@@ -7,6 +7,8 @@ const EventRegistration = require("../models/EventRegistration");
 const { requireAuth, authorizeRoles } = require("../middleware/auth");
 
 const router = express.Router();
+const SMSLog = require("../models/SMSLog");
+const { sendSMS } = require("../services/smsService");
 
 router.use(requireAuth);
 
@@ -598,7 +600,7 @@ router.patch(
 
             // Retrieve registration and validate approval.
             const existing = await EventRegistration.findById(id)
-                .select("event status");
+                .select("event status attendance");
 
             if (!existing) {
                 return res.status(404).json({
@@ -611,6 +613,24 @@ router.patch(
                 return res.status(400).json({
                     success: false,
                     message: "Attendance can only be marked for approved registrations."
+                });
+            }
+
+
+            // --------------------------------------------------
+            // PREVENT DUPLICATE ATTENDANCE SMS
+            // --------------------------------------------------
+
+            if (existing.attendance === attendance) {
+                return res.status(200).json({
+                    success: true,
+                    message: `Attendance is already marked as ${attendance}. No duplicate SMS sent.`,
+                    attendanceUnchanged: true,
+                    smsNotification: {
+                        attempted: false,
+                        status: "Skipped",
+                        message: "Attendance has not changed. Duplicate SMS prevented."
+                    }
                 });
             }
 
@@ -648,7 +668,8 @@ router.patch(
             const registration = await EventRegistration.findOneAndUpdate(
                 {
                     _id: id,
-                    status: "Approved"
+                    status: "Approved",
+                    attendance: { $ne: attendance }
                 },
                 {
                     $set: {
@@ -662,20 +683,156 @@ router.patch(
                     runValidators: true
                 }
             )
-                .populate("volunteer", "name email phone")
+                .populate(
+                    "volunteer",
+                    "name email phone preferredLanguage"
+                )
                 .populate("attendanceMarkedBy", "name");
 
             if (!registration) {
+
+                // Check whether another request already applied this attendance.
+                const latestRegistration = await EventRegistration.findById(id)
+                    .select("status attendance");
+
+                if (
+                    latestRegistration &&
+                    latestRegistration.status === "Approved" &&
+                    latestRegistration.attendance === attendance
+                ) {
+                    return res.status(200).json({
+                        success: true,
+                        message: `Attendance is already marked as ${attendance}. No duplicate SMS sent.`,
+                        attendanceUnchanged: true,
+                        smsNotification: {
+                            attempted: false,
+                            status: "Skipped",
+                            message: "Another request already applied this attendance. Duplicate SMS prevented."
+                        }
+                    });
+                }
+
                 return res.status(409).json({
                     success: false,
                     message: "Registration status changed. Please refresh and try again."
                 });
             }
 
+
+            // --------------------------------------------------
+            // AUTOMATIC ATTENDANCE SMS NOTIFICATION
+            // --------------------------------------------------
+
+            let smsNotification = {
+                attempted: false,
+                status: "Skipped",
+                message: "SMS notification was not attempted."
+            };
+
+            try {
+
+                const volunteer = registration.volunteer;
+
+                if (volunteer && volunteer.phone) {
+
+                    smsNotification.attempted = true;
+
+                    const language =
+                        volunteer.preferredLanguage === "kn" ? "kn" : "en";
+
+                    const attendanceKannada = {
+                        Present: "ಹಾಜರಿದ್ದಾರೆ",
+                        Absent: "ಗೈರುಹಾಜರಾಗಿದ್ದಾರೆ",
+                        Late: "ತಡವಾಗಿ ಹಾಜರಾಗಿದ್ದಾರೆ"
+                    };
+
+                    const smsMessage = language === "kn"
+                        ? `ನಮಸ್ಕಾರ ${volunteer.name}, ${event.title} ಕಾರ್ಯಕ್ರಮದಲ್ಲಿ ನಿಮ್ಮ ಹಾಜರಾತಿಯನ್ನು ${attendanceKannada[attendance]} ಎಂದು ದಾಖಲಿಸಲಾಗಿದೆ. NGO Volunteer Management System.`
+                        : `Hello ${volunteer.name}, your attendance for "${event.title}" has been marked as ${attendance}. Thank you. - NGO Volunteer Management System`;
+
+                    const smsResult = await sendSMS(
+                        [volunteer.phone],
+                        smsMessage
+                    );
+
+                    smsNotification.status =
+                        smsResult.success ? "Accepted" : "Failed";
+
+                    smsNotification.message = smsResult.success
+                        ? "Attendance SMS accepted by TextBee."
+                        : smsResult.error || "Attendance SMS failed.";
+
+                    // Record SMS attempt independently.
+                    try {
+
+                        const smsLog = await SMSLog.create({
+
+                            recipients: [volunteer.phone],
+
+                            message: smsMessage,
+
+                            type: "Attendance",
+
+                            status: smsResult.success
+                                ? "Accepted"
+                                : "Failed",
+
+                            smsBatchId: smsResult.smsBatchId || null,
+
+                            errorMessage: smsResult.success
+                                ? ""
+                                : smsResult.error || "SMS sending failed.",
+
+                            recipientCount: smsResult.success ? 1 : 0,
+
+                            sentBy: req.user._id
+
+                        });
+
+                        smsNotification.logId = smsLog._id;
+
+                    } catch (logError) {
+
+                        console.error(
+                            "Attendance SMS Logging Error:",
+                            logError.message
+                        );
+
+                        smsNotification.logError =
+                            "SMS attempt could not be recorded.";
+
+                    }
+
+                } else {
+
+                    smsNotification.message =
+                        "Volunteer phone number is unavailable.";
+
+                }
+
+            } catch (smsError) {
+
+                console.error(
+                    "Attendance SMS Notification Error:",
+                    smsError.message
+                );
+
+                smsNotification.status = "Failed";
+
+                smsNotification.message =
+                    "Attendance updated, but SMS notification failed.";
+
+            }
+
+
             return res.status(200).json({
                 success: true,
+
                 message: `Attendance marked as ${attendance} successfully.`,
-                registration
+
+                registration,
+
+                smsNotification
             });
 
         } catch (error) {

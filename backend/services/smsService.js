@@ -1,4 +1,5 @@
-﻿const TEXTBEE_URL = "https://api.textbee.dev/api/v1/gateway/send-sms";
+﻿const TEXTBEE_URL =
+    "https://api.textbee.dev/api/v1/gateway/send-sms";
 
 const sendSMS = async (recipients, message) => {
     try {
@@ -13,9 +14,12 @@ const sendSMS = async (recipients, message) => {
         const apiKey = process.env.TEXTBEE_API_KEY;
         const deviceId = process.env.TEXTBEE_DEVICE_ID;
 
-        if (!apiKey || !deviceId ||
+        if (
+            !apiKey ||
+            !deviceId ||
             apiKey.startsWith("YOUR_") ||
-            deviceId.startsWith("YOUR_")) {
+            deviceId.startsWith("YOUR_")
+        ) {
             return {
                 success: false,
                 error: "TextBee configuration is incomplete."
@@ -71,7 +75,8 @@ const sendSMS = async (recipients, message) => {
         if (!response.ok) {
             return {
                 success: false,
-                error: result.error ||
+                error:
+                    result.error ||
                     result.message ||
                     `TextBee request failed (${response.status}).`,
                 statusCode: response.status
@@ -83,7 +88,8 @@ const sendSMS = async (recipients, message) => {
         if (data.success === false) {
             return {
                 success: false,
-                error: data.message || "TextBee did not accept the SMS."
+                error: data.message ||
+                    "TextBee did not accept the SMS."
             };
         }
 
@@ -101,10 +107,11 @@ const sendSMS = async (recipients, message) => {
 
         return {
             success: false,
-            error: error.name === "TimeoutError" ||
+            error:
+                error.name === "TimeoutError" ||
                 error.name === "AbortError"
-                ? "TextBee request timed out."
-                : "Unable to connect to the SMS gateway."
+                    ? "TextBee request timed out."
+                    : "Unable to connect to the SMS gateway."
         };
     }
 };

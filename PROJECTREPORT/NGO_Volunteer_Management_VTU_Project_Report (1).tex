@@ -1,0 +1,945 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% =========================================================
+% VTU-STYLE PROJECT REPORT TEMPLATE
+% Project: Volunteer Management System for NGOs
+% Application name: NGO Volunteer Connect
+% Compile with pdfLaTeX (run twice for references/TOC).
+% Replace every field marked with angle-bracket placeholders.
+% =========================================================
+
+\usepackage[a4paper, left=1.5in, right=1in, top=1in, bottom=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds}
+
+
+% -------------------- Code Listings --------------------
+
+\usepackage{listings}
+
+\lstdefinelanguage{JavaScript}{
+    keywords={
+        break, case, catch, continue, debugger, default,
+        delete, do, else, finally, for, function, if,
+        in, instanceof, new, return, switch, this, throw,
+        try, typeof, var, void, while, with, let, const,
+        class, extends, super, import, export, from,
+        as, async, await, yield, true, false, null,
+        undefined
+    },
+    keywordstyle=\color{blue}\bfseries,
+    sensitive=true,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red!70!black},
+    morestring=[b]',
+    morestring=[b]",
+    morestring=[b]`
+}
+
+\lstset{
+    language=JavaScript,
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{CodeBG},
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red!70!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{CodeFrame},
+    breaklines=true,
+    breakatwhitespace=false,
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b
+}
+
+
+% General code listing appearance
+\lstset{
+    basicstyle=\ttfamily\small,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=8pt,
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    frame=single,
+    tabsize=4,
+    captionpos=b,
+    keepspaces=true
+}
+
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{caption}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+% -------------------- Colours --------------------
+\definecolor{Navy}{HTML}{17365D}
+\definecolor{DeepTeal}{HTML}{075B63}
+\definecolor{Teal}{HTML}{168C8C}
+\definecolor{LightBlue}{HTML}{EAF2F8}
+\definecolor{LightTeal}{HTML}{E8F4F2}
+\definecolor{Gold}{HTML}{C49A32}
+\definecolor{CodeBG}{HTML}{F4F6F8}
+\definecolor{CodeFrame}{HTML}{D5DDE5}
+
+% -------------------- Page and paragraph layout --------------------
+\onehalfspacing
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{3pt}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\renewcommand{\arraystretch}{1.25}
+
+% -------------------- Header and footer --------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Volunteer Management System for NGOs}
+\fancyhead[R]{\small \leftmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% -------------------- Chapter and section formatting --------------------
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\centering\color{Navy}}
+  {\Large CHAPTER \thechapter}
+  {8pt}
+  {\Large}
+  [\vspace{8pt}\titlerule]
+\titlespacing*{\chapter}{0pt}{-15pt}{24pt}
+
+\titleformat{\section}
+  {\normalfont\bfseries\large\color{DeepTeal}}
+  {\thesection}{0.8em}{}
+\titleformat{\subsection}
+  {\normalfont\bfseries\normalsize\color{Navy}}
+  {\thesubsection}{0.8em}{}
+
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftchappagefont}{\bfseries}
+\setlength{\cftbeforechapskip}{5pt}
+
+% -------------------- Listings --------------------
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{CodeBG},
+  frame=single,
+  rulecolor=\color{CodeFrame},
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=2
+}
+
+% -------------------- Reusable commands --------------------
+\newcommand{\projecttitle}{Volunteer Management System for NGOs}
+\newcommand{\applicationname}{NGO Volunteer Connect}
+\newcommand{\college}{\placeholder{NAME OF THE COLLEGE}}
+\newcommand{\department}{Department of Computer Science and Engineering}
+\newcommand{\university}{Visvesvaraya Technological University, Belagavi}
+\newcommand{\academicyear}{2026--2027}
+\newcommand{\degree}{Bachelor of Engineering}
+\newcommand{\branch}{Computer Science and Engineering}
+\newcommand{\guide}{\placeholder{NAME OF PROJECT GUIDE}}
+\newcommand{\guideDesignation}{\placeholder{GUIDE DESIGNATION}}
+\newcommand{\hod}{\placeholder{NAME OF HOD}}
+\newcommand{\principal}{\placeholder{NAME OF PRINCIPAL}}
+
+\newcommand{\placeholder}[1]{\textbf{\textcolor{red}{\textless #1\textgreater}}}
+\newcommand{\systemname}{\textit{\applicationname}}
+
+% =========================================================
+% DOCUMENT
+% =========================================================
+\begin{document}
+
+% -------------------- TITLE PAGE --------------------
+\begin{titlepage}
+\begin{center}
+{\Large\bfseries \university}\\[5pt]
+{\large \college}\\[3pt]
+{\large \department}\\[18pt]
+
+% Insert the official college/VTU logo if required:
+% \includegraphics[width=1.2in]{college-logo.png}\\[10pt]
+\fbox{\parbox[c][0.85in][c]{1.15in}{\centering College\\Logo}}\\[16pt]
+
+{\Large\bfseries PROJECT REPORT}\\[8pt]
+{\large on}\\[8pt]
+{\LARGE\bfseries\color{Navy} \projecttitle}\\[5pt]
+{\large (\applicationname)}\\[18pt]
+
+Submitted in partial fulfilment of the requirements for the award of the degree of\\[5pt]
+{\large\bfseries \degree}\\
+in\\
+{\large\bfseries \branch}\\[18pt]
+
+\textbf{Submitted by}\\[8pt]
+\begin{tabular}{ll}
+1. & \placeholder{STUDENT NAME 1} \quad -- \quad \placeholder{USN 1}\\
+2. & \placeholder{STUDENT NAME 2} \quad -- \quad \placeholder{USN 2}\\
+3. & \placeholder{STUDENT NAME 3} \quad -- \quad \placeholder{USN 3}\\
+4. & \placeholder{STUDENT NAME 4} \quad -- \quad \placeholder{USN 4}
+\end{tabular}\\[18pt]
+
+Under the guidance of\\[4pt]
+{\large\bfseries \guide}\\
+\guideDesignation\\[16pt]
+
+{\large\bfseries \college}\\
+\department\\[5pt]
+Academic Year: \academicyear
+
+\end{center}
+\end{titlepage}
+
+% -------------------- CERTIFICATE --------------------
+\pagenumbering{roman}
+\chapter*{CERTIFICATE}
+\addcontentsline{toc}{chapter}{CERTIFICATE}
+
+This is to certify that the project work entitled \textbf{``\projecttitle''}, developed as \textbf{\applicationname}, is a bonafide work carried out by the students listed below, in partial fulfilment of the requirements for the award of the degree of \textbf{\degree} in \textbf{\branch} of \textbf{\university} during the academic year \academicyear.
+
+The project work has been carried out under my supervision and guidance. The corrections and suggestions indicated during the internal evaluation have been incorporated in the report. To the best of my knowledge, the work presented in this report has not been submitted elsewhere for the award of any other degree or diploma.
+
+\vspace{1.0in}
+\noindent
+\begin{tabularx}{\textwidth}{
+    >{\centering\arraybackslash}X
+    >{\centering\arraybackslash}X
+}
+
+\rule{2.2in}{0.4pt} &
+\rule{2.2in}{0.4pt} \\[0.15cm]
+
+\guide &
+\hod \\[0.1cm]
+
+Project Guide &
+Head of the Department \\
+
+\end{tabularx}
+\vfill
+\noindent Place: \college\\
+Date: \placeholder{DATE OF SUBMISSION}
+
+\clearpage
+
+% -------------------- DECLARATION --------------------
+\chapter*{DECLARATION}
+\addcontentsline{toc}{chapter}{DECLARATION}
+
+We hereby declare that the project entitled \textbf{``\projecttitle''} is an original work carried out by us under the guidance of \textbf{\guide}, \guideDesignation, \department, \college. This report is submitted in partial fulfilment of the requirements for the award of the degree of \textbf{\degree} in \textbf{\branch} from \textbf{\university} for the academic year \academicyear.
+
+We further declare that this work, either in full or in part, has not been submitted to any other university or institution for the award of any degree, diploma, fellowship, or other similar title. All sources of information used in the preparation of this report have been acknowledged in the references.
+
+\vspace{0.6in}
+\begin{flushright}
+\begin{tabular}{ll}
+1. & \placeholder{STUDENT NAME 1} \quad \placeholder{USN 1}\\[8pt]
+2. & \placeholder{STUDENT NAME 2} \quad \placeholder{USN 2}\\[8pt]
+3. & \placeholder{STUDENT NAME 3} \quad \placeholder{USN 3}\\[8pt]
+4. & \placeholder{STUDENT NAME 4} \quad \placeholder{USN 4}
+\end{tabular}
+\end{flushright}
+
+\clearpage
+
+% -------------------- ACKNOWLEDGEMENT --------------------
+\chapter*{ACKNOWLEDGEMENT}
+\addcontentsline{toc}{chapter}{ACKNOWLEDGEMENT}
+
+We express our sincere gratitude to the management of \college\ for providing the facilities and academic environment required to carry out this project.
+
+We thank \principal, Principal, and \hod, Head of the \department, for their encouragement and support. We are grateful to our project guide, \guide, \guideDesignation, for valuable guidance, technical suggestions, constructive feedback, and continuous encouragement throughout the development of this project.
+
+We also thank the faculty members and technical staff of the department for their assistance. Finally, we extend our appreciation to our families and friends for their support during the completion of this work.
+
+\clearpage
+
+% -------------------- ABSTRACT --------------------
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{ABSTRACT}
+
+Non-governmental organisations (NGOs) frequently depend on volunteers to conduct community programmes, awareness campaigns, educational activities, healthcare initiatives, environmental drives, and relief operations. Coordinating these volunteers requires maintaining accurate records, publishing opportunities, processing registrations, monitoring attendance, communicating timely updates, and preparing activity reports. When these activities are handled through disconnected spreadsheets, phone calls, paper registers, or messaging groups, the organisation may face duplicated records, delayed communication, inconsistent attendance information, and difficulty retrieving consolidated reports.
+
+The \textbf{Volunteer Management System for NGOs}, implemented as \textbf{\applicationname}, is a web-based application intended to centralise these operational activities. The system provides role-based access for administrators, coordinators, and volunteers. Administrators and authorised coordinators can manage events, review volunteer registrations, and maintain operational information. Volunteers can access published opportunities and submit registrations. Approved registrations are used as the basis for attendance management.
+
+The application uses HTML5, CSS3, and JavaScript for the client interface, Node.js and Express.js for server-side request handling, and MongoDB Atlas for persistent data storage. Authentication and role-based authorisation protect application routes and operations. Event records include event title, description, category, date, time, venue, capacity, registration deadline, and publication status. Registration and attendance workflows are associated with the event and volunteer records. Duplicate event prevention is implemented through application-level comparison and a MongoDB unique sparse index on a normalised event key. Date comparisons and event-date handling are designed around Indian Standard Time (IST).
+
+TextBee is integrated as the SMS gateway for event announcements, attendance notifications, and coordinator-initiated bulk messages. SMS attempts are recorded in an SMS log for traceability. Since SMS delivery depends on the external provider, an accepted API request is distinguished from confirmed handset delivery. The project demonstrates how a centralised web application can improve the organisation, traceability, and accessibility of volunteer coordination activities.
+
+\textbf{Keywords:} NGO, Volunteer Management, Event Management, MongoDB Atlas, Node.js, Express.js, Role-Based Access Control, Attendance Management, TextBee, SMS Notification.
+
+\clearpage
+
+% -------------------- ABBREVIATIONS --------------------
+\chapter*{ABBREVIATIONS}
+\addcontentsline{toc}{chapter}{ABBREVIATIONS}
+\begin{tabularx}{\textwidth}{>{\bfseries}l X}
+API & Application Programming Interface\\
+CRUD & Create, Read, Update and Delete\\
+DBMS & Database Management System\\
+HTML & HyperText Markup Language\\
+HTTP & Hypertext Transfer Protocol\\
+IST & Indian Standard Time\\
+JS & JavaScript\\
+NGO & Non-Governmental Organisation\\
+RBAC & Role-Based Access Control\\
+SMS & Short Message Service\\
+UI & User Interface\\
+USN & University Seat Number\\
+VTU & Visvesvaraya Technological University\\
+\end{tabularx}
+
+\clearpage
+\tableofcontents
+\clearpage
+\listoffigures
+\addcontentsline{toc}{chapter}{LIST OF FIGURES}
+\clearpage
+\listoftables
+\addcontentsline{toc}{chapter}{LIST OF TABLES}
+\clearpage
+
+\pagenumbering{arabic}
+
+% =========================================================
+% CHAPTER 1
+% =========================================================
+\chapter{INTRODUCTION}
+
+\section{Introduction}
+Non-governmental organisations contribute to social development through activities such as education, healthcare, environmental protection, community development, food distribution, and animal welfare. Many of these activities depend on volunteers who contribute time and skills to planned programmes. As the number of volunteers and events increases, maintaining accurate information and coordinating participation becomes a significant administrative responsibility.
+
+A volunteer management process generally includes volunteer onboarding, maintaining contact information, publishing opportunities, accepting registrations, reviewing participation requests, communicating event details, recording attendance, and preparing reports. If these tasks are distributed across paper records, spreadsheets, and independent messaging channels, information may become fragmented. Staff members may need to re-enter the same information in multiple places, and management may not have a consistent view of event participation.
+
+The proposed system, \systemname, provides a centralised web-based environment for these activities. It is designed around three primary roles: administrator, coordinator, and volunteer. Each role is provided with only the operations required for its responsibilities. The system stores application data in MongoDB Atlas and uses TextBee for SMS communication.
+
+\section{Background}
+Volunteer coordination is both an administrative and communication-intensive activity. An NGO may announce an event, receive registrations, approve eligible volunteers, communicate updates, record attendance, and later prepare a participation summary. A reliable digital system should preserve the relationship between volunteers, events, registrations, attendance, and notification records.
+
+The project addresses this need by combining event management, registration processing, attendance tracking, and communication workflows in one application. It also introduces validation and duplicate-prevention mechanisms to improve data consistency.
+
+\section{Problem Statement}
+Many NGOs manage volunteer activities using manual registers, spreadsheets, phone calls, or separate messaging applications. These methods can lead to fragmented information, duplicate event entries, delayed announcements, difficulty tracking registration status, inconsistent attendance records, and time-consuming report preparation. There is a need for a centralised, role-based web application that supports volunteer and event management, registration processing, attendance tracking, and traceable notifications.
+
+\section{Objectives}
+The major objectives of the project are:
+\begin{enumerate}[label=\arabic*.]
+  \item To develop a centralised web-based platform for NGO volunteer coordination.
+  \item To provide role-based access for administrators, coordinators, and volunteers.
+  \item To maintain volunteer and event information in a structured database.
+  \item To allow authorised users to create, publish, update, and manage events.
+  \item To support volunteer registration and registration-status management.
+  \item To record attendance for approved event registrations.
+  \item To send event announcements and attendance-related SMS notifications through TextBee.
+  \item To maintain SMS logs for operational traceability.
+  \item To prevent duplicate event records using application and database constraints.
+  \item To provide a foundation for consolidated activity and participation reporting.
+\end{enumerate}
+
+\section{Scope of the Project}
+The scope of the project includes:
+\begin{itemize}
+  \item Secure user authentication and role-based access.
+  \item Volunteer-facing access to published events.
+  \item Administrative and coordinator event-management operations.
+  \item Event registration and registration-status workflows.
+  \item Attendance updates for approved registrations.
+  \item SMS notifications for event announcements and attendance-related events.
+  \item Coordinator-initiated bulk SMS functionality.
+  \item Persistent storage using MongoDB Atlas.
+  \item SMS attempt logging and basic operational verification.
+\end{itemize}
+
+The project is intended as an NGO coordination application. It does not claim to replace an NGO's accounting, payroll, donor-management, or statutory compliance systems.
+
+\section{Organisation of the Report}
+This report is organised into seven chapters. Chapter 1 introduces the project and its objectives. Chapter 2 reviews the existing approach and proposed solution. Chapter 3 presents requirements and feasibility. Chapter 4 describes system analysis and design. Chapter 5 explains implementation. Chapter 6 discusses testing and results. Chapter 7 presents the conclusion and future enhancements.
+
+% =========================================================
+% CHAPTER 2
+% =========================================================
+\chapter{LITERATURE REVIEW AND EXISTING SYSTEM}
+
+\section{Existing Volunteer Coordination Practices}
+Small and medium-sized NGOs may use a combination of paper forms, spreadsheets, telephone calls, email, and messaging groups to coordinate volunteers. These tools are accessible and familiar, but they are not necessarily integrated. Event details may be entered in multiple locations, and registration information may need to be manually reconciled with attendance records.
+
+\section{Limitations of the Existing System}
+The major limitations identified are:
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{Fragmented records:} Volunteer and event information may be stored in separate files or registers.
+  \item \textbf{Duplicate entries:} Repeated data entry can create multiple records for the same event or volunteer activity.
+  \item \textbf{Delayed communication:} Event updates may not reach all intended volunteers promptly.
+  \item \textbf{Manual attendance:} Paper-based attendance requires later transcription and may introduce errors.
+  \item \textbf{Limited traceability:} It may be difficult to determine which notification was attempted and whether the provider accepted it.
+  \item \textbf{Time-consuming reporting:} Consolidating event, registration, and attendance information requires manual effort.
+  \item \textbf{Weak access separation:} Shared files may not provide sufficiently clear separation between administrative and volunteer operations.
+\end{enumerate}
+
+\section{Proposed System}
+The proposed system centralises volunteer coordination through a web application. User authentication identifies the current user, and role-based authorisation controls access to protected operations. Events are stored in a database and made visible to volunteers according to publication status. Registration records connect volunteers with events, while attendance is maintained against the corresponding registration.
+
+The application uses server-side validation and database constraints to protect data integrity. The event duplicate-prevention mechanism generates a normalised key from the event date, title, and venue. The application checks for matching records, including older records, and MongoDB enforces uniqueness through a unique sparse index.
+
+TextBee is used as the external SMS gateway. The application records notification attempts in an SMS log. The status \textit{Accepted} represents provider acceptance of a request; it must not be interpreted as proof of delivery to the recipient's handset.
+
+\section{Comparison of Existing and Proposed Systems}
+\begin{table}[H]
+\centering
+\caption{Comparison of existing and proposed systems}
+\begin{tabularx}{\textwidth}{|p{3.1cm}|X|X|}
+\hline
+\textbf{Aspect} & \textbf{Existing approach} & \textbf{Proposed system}\\ \hline
+Data storage & Registers and separate files & Centralised MongoDB database\\ \hline
+Access control & Often informal or file-based & Authenticated roles and protected routes\\ \hline
+Event management & Manual entry and communication & Structured event creation and status management\\ \hline
+Registration & Manual lists or forms & Database-backed registration workflow\\ \hline
+Attendance & Paper or spreadsheet entry & Attendance update associated with registration\\ \hline
+Notifications & Calls and independent messages & TextBee integration with SMS logging\\ \hline
+Duplicate prevention & Manual checking & Application checks and unique database index\\ \hline
+Traceability & Limited central history & SMS attempt records and persistent event data\\ \hline
+\end{tabularx}
+\end{table}
+
+\section{Advantages of the Proposed System}
+The proposed system offers centralised data management, clearer role separation, consistent event records, structured registration processing, attendance traceability, and integrated communication. It also provides a basis for future dashboards and analytical reports.
+
+% =========================================================
+% CHAPTER 3
+% =========================================================
+\chapter{REQUIREMENTS ANALYSIS AND FEASIBILITY STUDY}
+
+\section{Stakeholders and User Roles}
+The system has three primary roles.
+
+\subsection{Administrator}
+The administrator is responsible for overall application administration. Depending on the permissions configured in the application, administrative functions include managing users, overseeing events, accessing protected management operations, and monitoring system records.
+
+\subsection{Coordinator}
+The coordinator supports operational activities. The coordinator can manage events and perform authorised registration and attendance operations. The coordinator bulk-SMS workflow is intended for sending operational messages to selected recipients.
+
+\subsection{Volunteer}
+The volunteer is an end user who accesses published event opportunities and submits registrations. A volunteer should not be able to access unpublished event information or administrative operations.
+
+\section{Functional Requirements}
+\begin{longtable}{|p{1.4cm}|p{4.0cm}|p{8.0cm}|}
+\caption{Functional requirements}\\ \hline
+\textbf{ID} & \textbf{Requirement} & \textbf{Description}\\ \hline
+FR-01 & Authentication & The system shall authenticate users before granting access to protected operations.\\ \hline
+FR-02 & Role authorisation & The system shall distinguish administrator, coordinator, and volunteer permissions.\\ \hline
+FR-03 & Event creation & Authorised users shall be able to create events with validated details.\\ \hline
+FR-04 & Event publication & Authorised users shall be able to manage event publication status.\\ \hline
+FR-05 & Event listing & Volunteers shall be able to view published events.\\ \hline
+FR-06 & Event update & Authorised users shall be able to update permitted event fields.\\ \hline
+FR-07 & Duplicate prevention & The system shall reject duplicate events having the same normalised title, IST date, and venue.\\ \hline
+FR-08 & Registration & Volunteers shall be able to submit event registrations.\\ \hline
+FR-09 & Registration review & Authorised users shall be able to manage registration status.\\ \hline
+FR-10 & Attendance & Authorised users shall be able to update attendance for approved registrations, subject to event-date validation.\\ \hline
+FR-11 & Event SMS & Publication of an event shall trigger an announcement workflow.\\ \hline
+FR-12 & Attendance SMS & Attendance changes shall trigger the configured notification workflow.\\ \hline
+FR-13 & Bulk SMS & An authorised coordinator shall be able to initiate bulk SMS communication.\\ \hline
+FR-14 & SMS logging & The system shall store notification attempt details and outcomes.\\ \hline
+\end{longtable}
+
+\section{Non-Functional Requirements}
+\begin{itemize}
+  \item \textbf{Security:} Protected routes must require authentication and enforce role permissions.
+  \item \textbf{Data integrity:} Required fields, valid dates, event capacity, and duplicate constraints must be checked.
+  \item \textbf{Usability:} The interface should present clear forms, labels, validation feedback, and role-appropriate navigation.
+  \item \textbf{Maintainability:} The application should separate routes, models, services, and client-side assets.
+  \item \textbf{Availability:} The application depends on the availability of the backend, MongoDB Atlas, network connectivity, and the external SMS provider.
+  \item \textbf{Traceability:} SMS attempts and relevant operational records should be retained for later review.
+  \item \textbf{Compatibility:} The web interface should work with modern standards-compliant browsers.
+  \item \textbf{Localisation:} English and Kannada notification content is supported in the implemented SMS workflows.
+\end{itemize}
+
+\section{Hardware Requirements}
+\begin{table}[H]
+\centering
+\caption{Indicative hardware requirements}
+\begin{tabularx}{\textwidth}{|p{4cm}|X|}
+\hline
+Processor & Modern dual-core processor or better\\ \hline
+RAM & 4 GB minimum; 8 GB or more recommended\\ \hline
+Storage & Sufficient free storage for source code, dependencies, and development tools\\ \hline
+Network & Internet connection for MongoDB Atlas and TextBee communication\\ \hline
+Client device & Desktop, laptop, tablet, or smartphone with a modern browser\\ \hline
+\end{tabularx}
+\end{table}
+
+\section{Software Requirements}
+\begin{table}[H]
+\centering
+\caption{Software and technology stack}
+\begin{tabularx}{\textwidth}{|p{4cm}|X|}
+\hline
+Frontend & HTML5, CSS3, JavaScript\\ \hline
+Backend runtime & Node.js\\ \hline
+Backend framework & Express.js\\ \hline
+Database & MongoDB Atlas\\ \hline
+Data modelling & Mongoose ODM\\ \hline
+SMS gateway & TextBee\\ \hline
+Development environment & Visual Studio Code or equivalent editor; Windows/PowerShell used during development\\ \hline
+Browser & Modern browser supporting HTML5, CSS3, and JavaScript\\ \hline
+\end{tabularx}
+\end{table}
+
+\section{Feasibility Study}
+\subsection{Technical Feasibility}
+The system uses established web technologies and a document-oriented database. Node.js and Express.js provide server-side routing, while Mongoose supports schema definition and database operations. MongoDB Atlas provides managed database hosting. TextBee provides the external SMS interface. The implementation is technically feasible provided that network access, credentials, and provider limits are available.
+
+\subsection{Economic Feasibility}
+The application is built using widely available development technologies. The overall operational cost depends on hosting, database usage, SMS quota or subscription, domain registration, and maintenance. The use of managed services can reduce infrastructure administration, although service charges and provider limits must be considered.
+
+\subsection{Operational Feasibility}
+The role-based interface is intended to support the existing responsibilities of NGO administrators, coordinators, and volunteers. Centralised event and registration records can reduce repetitive administrative work. Training and clear operating procedures are still required for reliable adoption.
+
+\subsection{Schedule Feasibility}
+The project can be developed incrementally: authentication and database connectivity, event management, registration, attendance, SMS integration, validation, and testing. This modular approach allows individual workflows to be verified before integration.
+
+% =========================================================
+% CHAPTER 4
+% =========================================================
+\chapter{SYSTEM ANALYSIS AND DESIGN}
+
+\section{System Architecture}
+The application follows a client-server architecture. The browser presents the user interface and sends HTTP requests to the Express.js backend. The backend authenticates the user, checks permissions, validates input, performs business logic, and communicates with MongoDB Atlas through Mongoose. When a notification is required, the backend invokes the SMS service, which communicates with TextBee. SMS attempt details are stored in the SMS log collection.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=1.1cm and 1.1cm,
+  block/.style={draw=Navy, thick, rounded corners, fill=LightBlue,
+    align=center, minimum width=3.0cm, minimum height=1.0cm},
+  ext/.style={draw=DeepTeal, thick, rounded corners, fill=LightTeal,
+    align=center, minimum width=2.8cm, minimum height=1.0cm},
+  arr/.style={-{Latex[length=3mm]}, thick}
+]
+\node[block] (browser) {User Browser\\HTML, CSS, JavaScript};
+\node[block, below=of browser] (server) {Node.js + Express.js\\Routes, validation, RBAC};
+\node[block, below left=1.25cm and 0.5cm of server] (db) {MongoDB Atlas\\Mongoose models};
+\node[ext, below right=1.25cm and 0.5cm of server] (sms) {TextBee SMS Gateway};
+\node[block, below=1.2cm of db] (logs) {SMSLog and\\application records};
+\draw[arr] (browser) -- node[right]{HTTP requests} (server);
+\draw[arr] (server) -- node[above left]{Database operations} (db);
+\draw[arr] (server) -- node[above right]{SMS API request} (sms);
+\draw[arr] (db) -- (logs);
+\draw[arr] (server.south) |- (logs.east);
+\end{tikzpicture}
+\caption{High-level architecture of NGO Volunteer Connect}
+\end{figure}
+
+\section{Data Flow}
+The primary data flow begins when a user authenticates. The backend verifies the user's credentials and establishes the authenticated session or token context used by protected routes. The user then performs an operation according to the assigned role. For example, an administrator or coordinator creates an event; the server validates the fields and stores the event. When an event is published, the announcement workflow identifies eligible recipients and invokes TextBee. The result of the SMS request is recorded in the SMS log.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=0.8cm,
+  proc/.style={draw=Navy, thick, rounded corners, fill=LightBlue,
+    align=center, text width=4.0cm, minimum height=0.8cm},
+  arr/.style={-{Latex[length=2.5mm]}, thick}
+]
+\node[proc] (login) {User login};
+\node[proc, below=of login] (auth) {Authenticate and identify role};
+\node[proc, below=of auth] (action) {Perform authorised operation};
+\node[proc, below=of action] (validate) {Validate input and business rules};
+\node[proc, below=of validate] (db) {Read/write MongoDB records};
+\node[proc, below=of db] (notify) {Trigger notification when applicable};
+\node[proc, below=of notify] (result) {Return response and record SMS attempt};
+\draw[arr] (login)--(auth);
+\draw[arr] (auth)--(action);
+\draw[arr] (action)--(validate);
+\draw[arr] (validate)--(db);
+\draw[arr] (db)--(notify);
+\draw[arr] (notify)--(result);
+\end{tikzpicture}
+\caption{General application data flow}
+\end{figure}
+
+\section{Use Case Description}
+The main use cases are:
+\begin{itemize}
+  \item User login and authenticated access.
+  \item Administrator management of users and events.
+  \item Coordinator creation and updating of events.
+  \item Volunteer viewing of published events.
+  \item Volunteer submission of event registration.
+  \item Authorised review of registration status.
+  \item Attendance marking for approved registrations.
+  \item Event announcement and attendance notification.
+  \item Coordinator bulk SMS.
+  \item Review of stored SMS attempt information.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Role and use-case mapping}
+\begin{tabularx}{\textwidth}{|p{4cm}|c|c|c|}
+\hline
+\textbf{Use case} & \textbf{Admin} & \textbf{Coordinator} & \textbf{Volunteer}\\ \hline
+Authenticate & Yes & Yes & Yes\\ \hline
+Manage events & Yes & Yes & No\\ \hline
+View published events & Yes & Yes & Yes\\ \hline
+Submit registration & As configured & As configured & Yes\\ \hline
+Review registrations & Yes & Yes & No\\ \hline
+Update attendance & Yes & Yes & No\\ \hline
+Coordinator bulk SMS & As authorised & Yes & No\\ \hline
+Delete event & Yes & No & No\\ \hline
+\end{tabularx}
+\end{table}
+
+\section{Database Design}
+MongoDB stores application records as documents. Mongoose models define the expected structure and validation rules. The main data areas identified in the implementation include users, events, event registrations, and SMS logs. Attendance information is maintained with the relevant registration workflow rather than being treated as an unrelated event record.
+
+\subsection{User Data}
+The user data area stores identity and access information required by the application. Fields used by the notification workflow include role, active status, phone number, and preferred language. Passwords must be stored using an appropriate password-hashing mechanism and must never be returned in ordinary API responses.
+
+\subsection{Event Data}
+The event model stores event title, optional Kannada title, description, category, event date, start and end times, venue, address, capacity, required volunteers, registration deadline, status, creator/updater information, and duplicate-prevention metadata.
+
+\subsection{Event Registration and Attendance}
+A registration associates a volunteer with an event and maintains its workflow status, such as Pending, Approved, Rejected, or Cancelled. Attendance is associated with an approved registration and can be updated by an authorised user. The system validates event timing and prevents redundant attendance notifications when the attendance value has not changed.
+
+\subsection{SMS Log}
+The SMS log stores information about notification attempts, including recipients, message content, notification type, status, provider batch identifier where available, error information, recipient count, and the user who initiated the operation. A provider-accepted request is recorded as accepted; it is not equivalent to confirmed delivery.
+
+
+\section{Event Duplicate Prevention Design}
+
+A normalised event key is generated from three values:
+the IST calendar date, lower-case trimmed event title,
+and lower-case trimmed venue. The components are
+separated and stored as a single \texttt{eventKey}.
+Before creating or updating an event, the backend
+searches for an existing matching record. A legacy
+comparison is also used to identify records created
+before the key was introduced.
+
+MongoDB enforces a unique sparse index on
+\texttt{eventKey}. The application handles
+duplicate-key error code 11000 by returning an
+HTTP 409 Conflict response. Existing legacy event
+records were migrated by assigning their keys after
+a duplicate audit.
+
+\begin{lstlisting}[
+    language=JavaScript,
+    caption={Illustrative event key generation},
+    label={lst:event-key-generation}
+]
+function createEventKey(title, eventDate, venue) {
+
+    const dateKey = getISTDateKey(eventDate);
+
+    const normalizedTitle = String(title || "")
+        .trim().toLowerCase().replace(/\s+/g, " ");
+
+    const normalizedVenue = String(venue || "")
+        .trim().toLowerCase().replace(/\s+/g, " ");
+
+    return [dateKey, normalizedTitle, normalizedVenue].join("|");
+}
+\end{lstlisting}
+\section{Security Design}
+Security is addressed through authentication middleware and role-based authorisation middleware. Protected routes require an authenticated user. Operations such as event creation and update are limited to authorised roles, while event deletion is restricted to the administrator. Server-side validation is applied even when the browser also validates input. Database credentials and SMS provider credentials must be kept in environment variables and must not be committed to source control.
+
+% =========================================================
+% CHAPTER 5
+% =========================================================
+\chapter{IMPLEMENTATION}
+
+\section{Development Environment}
+The application backend was developed using Node.js and Express.js. Mongoose provides schema-based interaction with MongoDB Atlas. The backend development server was configured at \texttt{http://localhost:5013}. The database used by the application is \texttt{ngo\_volunteer\_db}. The client interface uses HTML5, CSS3, and JavaScript.
+
+\section{Frontend Implementation}
+The frontend provides forms, tables, dashboards, event listings, and action controls appropriate to each user role. Client-side JavaScript collects form data, performs preliminary validation, sends requests to the backend, and displays success or error messages. Client-side validation improves usability, while the backend remains responsible for authoritative validation and access control.
+
+The interface is intended to be responsive so that volunteers and coordinators can access the application from common desktop and mobile browsers. English and Kannada content is used in the notification workflows.
+
+\section{Backend Implementation}
+Express.js routes receive client requests and coordinate the application logic. Authentication middleware identifies the current user. Authorisation middleware checks whether the role is permitted to perform the requested operation. The route handlers validate data, interact with Mongoose models, and return structured JSON responses.
+
+The backend uses a modular organisation in which models represent database entities, routes implement HTTP endpoints, middleware provides cross-cutting controls, and services encapsulate external SMS communication.
+
+\section{Authentication and Role-Based Access}
+A user must authenticate before accessing protected endpoints. The authenticated user context is used by route handlers to determine permissions and to associate created or updated records with the responsible user. The role checks are performed on the server so that a user cannot gain administrative access merely by changing the browser interface.
+
+\section{Event Management}
+Authorised administrators and coordinators can create and update events. The event form captures the title, description, category, event date, start time, end time, venue, address, capacity, required volunteers, registration deadline, and status.
+
+Validation checks include:
+\begin{itemize}
+  \item Required title, description, category, date, time, and venue.
+  \item Valid calendar dates and IST date conversion.
+  \item Registration deadline not later than the event date.
+  \item Valid 24-hour time values and end time later than start time.
+  \item Positive whole-number capacity and volunteer requirement.
+  \item Required volunteers not exceeding event capacity.
+  \item Valid event status.
+  \item Duplicate event detection using title, date, and venue.
+\end{itemize}
+
+Events can be maintained in Draft, Published, Cancelled, or Completed states. Volunteers are restricted to published events.
+
+\section{Volunteer Registration}
+The registration workflow connects a volunteer to an event. The registration record maintains the status of the request. The configured workflow supports Pending, Approved, Rejected, and Cancelled states. A unique event-volunteer relationship is used to prevent repeated registration for the same event, subject to the database constraints defined by the registration model.
+
+\section{Attendance Management}
+Attendance is updated for approved registrations by users with the required administrative or coordinator permission. The backend validates the registration identifier, registration status, and event date. An unchanged attendance value should not trigger a duplicate notification. The attendance update and its notification workflow are handled by the backend.
+
+\section{SMS Notification Integration}
+TextBee is integrated through a backend SMS service. The implemented notification workflows include:
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{Event announcement:} An announcement workflow is initiated when an event is published.
+  \item \textbf{Attendance notification:} A notification is initiated when an attendance value changes.
+  \item \textbf{Coordinator bulk SMS:} An authorised coordinator can initiate a bulk message operation.
+\end{enumerate}
+
+For event announcements, active coordinators and volunteers are considered as recipients. Duplicate phone numbers are removed, and recipients are grouped according to their preferred language. English and Kannada announcement messages are generated. The application stores the SMS attempt details in the SMS log.
+
+The event announcement workflow uses an atomic database update on \texttt{announcementClaimedAt} so that concurrent requests do not both claim the same announcement. This is an at-most-once claim mechanism. A persistent retry queue would be required to guarantee automatic recovery if the application stops after claiming an announcement but before completing the external SMS operation.
+
+\subsection{External Provider Limitations}
+SMS delivery depends on TextBee service availability, device connectivity, account quota, and provider-side limits. During the project verification period, the TextBee account reached its maximum daily message count. Consequently, SMS-triggering tests must be paused or performed only when the provider quota is available. An API result indicating acceptance means that the provider accepted the request; it does not prove that the message reached the handset.
+
+\section{Error Handling and Logging}
+The backend returns appropriate HTTP status codes for validation errors, missing records, unauthorised operations, and duplicate conflicts. In particular, duplicate event creation returns HTTP 409 Conflict. SMS failures are handled separately so that an external notification failure does not reverse a successfully stored event. SMS log records provide a trace of notification attempts and provider responses.
+
+\section{Database Migration}
+The event duplicate-prevention field was introduced after some event records already existed. A migration script was executed to assign an event key to each legacy event. Before migration, an audit grouped existing events by normalised title, IST date, and venue. The audit found no duplicate groups among the 11 records present at that verification point. The migration updated nine legacy records, and subsequent verification reported zero events missing an event key.
+
+% =========================================================
+% CHAPTER 6
+% =========================================================
+\chapter{TESTING AND RESULTS}
+
+\section{Testing Strategy}
+Testing was performed at the level of individual workflows and their integration. The principal objective was to verify that requests are validated, authorised, stored correctly, and handled consistently when an error occurs. Testing includes database connectivity, event creation, duplicate prevention, migration verification, registration and attendance workflows, and SMS integration.
+
+\section{Test Environment}
+\begin{table}[H]
+\centering
+\caption{Test environment}
+\begin{tabularx}{\textwidth}{|p{4cm}|X|}
+\hline
+Backend & Node.js and Express.js\\ \hline
+Backend URL & \texttt{http://localhost:5013}\\ \hline
+Database & MongoDB Atlas\\ \hline
+Database name & \texttt{ngo\_volunteer\_db}\\ \hline
+ODM & Mongoose\\ \hline
+SMS provider & TextBee\\ \hline
+Client & Modern web browser\\ \hline
+\end{tabularx}
+\end{table}
+
+\section{Functional Test Cases}
+\begin{longtable}{|p{1.0cm}|p{4.0cm}|p{5.0cm}|p{3.0cm}|}
+\caption{Functional test cases and observed verification}\\ \hline
+\textbf{ID} & \textbf{Test} & \textbf{Expected result} & \textbf{Status}\\ \hline
+TC-01 & Backend health check & Backend reports service and database connectivity & Verified\\ \hline
+TC-02 & MongoDB connection & Application connects to \texttt{ngo\_volunteer\_db} & Verified\\ \hline
+TC-03 & Create valid event & Event is stored and success response is returned & Implemented; test in application\\ \hline
+TC-04 & Create duplicate event & Request is rejected with HTTP 409 Conflict & Verified\\ \hline
+TC-05 & Duplicate database insertion check & Event count remains unchanged after rejected duplicate & Verified; count remained 11\\ \hline
+TC-06 & Unique event key index & Unique sparse index exists on \texttt{eventKey} & Verified\\ \hline
+TC-07 & Legacy event migration & Missing event keys are assigned without modifying event details & Verified; 9 records modified\\ \hline
+TC-08 & Event-key verification & No event remains without an event key & Verified; 0 missing\\ \hline
+TC-09 & Registration workflow & Registration status is persisted and managed by authorised users & Implemented; verify in application\\ \hline
+TC-10 & Attendance workflow & Attendance changes are persisted for approved registrations & Implemented; SMS workflow previously confirmed\\ \hline
+TC-11 & Event announcement SMS & Published event initiates announcement workflow & Previously confirmed; quota-dependent\\ \hline
+TC-12 & SMS provider quota & Provider limit is handled without treating acceptance as delivery & Quota limit encountered\\ \hline
+\end{longtable}
+
+\section{Verified Duplicate Event Protection}
+The event database was inspected after migration. At the verification point, the database contained 11 event records. Nine legacy records were migrated and two records already had event keys. A duplicate audit found zero existing duplicate groups. The migration completed with nine matched and nine modified documents. A separate verification script confirmed that all 11 records had an event key and that the unique sparse index was active.
+
+A duplicate event submission using the same title, date, and venue returned the message ``A similar event already exists for this date and venue.'' The subsequent database verification showed that the total event count remained 11. This confirms that the duplicate submission was rejected without creating an additional event.
+
+\section{SMS Workflow Verification}
+The project includes event announcement, attendance notification, and coordinator bulk SMS workflows. These workflows were exercised during development and were reported as working. SMS testing is dependent on the TextBee account quota and device availability. At the time of report preparation, the TextBee account had reached its maximum daily message count. Therefore, further live SMS tests should be performed after quota availability is restored. SMS acceptance and actual delivery must be evaluated as separate states.
+
+\section{Result Analysis}
+The verified results demonstrate that the backend can connect to MongoDB Atlas, maintain event records, identify duplicate event submissions, and enforce uniqueness through a database index. The legacy migration brought all existing event records under the new event-key constraint. The notification architecture provides a common service for sending messages and recording attempts. The external SMS provider introduces an operational dependency that must be considered during testing and deployment.
+
+\section{Limitations}
+The current implementation has the following limitations and areas requiring operational attention:
+\begin{itemize}
+  \item Live SMS testing is subject to TextBee daily quota and device connectivity.
+  \item Provider acceptance does not establish handset delivery.
+  \item The atomic announcement claim prevents concurrent duplicate claims but does not by itself provide automatic retry after a process failure.
+  \item Production deployment requires secure configuration of environment variables, HTTPS, backups, monitoring, and access policies.
+  \item Report analytics can be expanded with additional filters, export formats, and historical comparisons.
+\end{itemize}
+
+% =========================================================
+% CHAPTER 7
+% =========================================================
+\chapter{CONCLUSION AND FUTURE ENHANCEMENTS}
+
+\section{Conclusion}
+The project \textbf{\projecttitle}, implemented as \textbf{\applicationname}, provides a web-based approach to organising NGO volunteer coordination activities. It brings together authentication, role-based access, event management, volunteer registration, attendance management, and SMS communication through a common application architecture.
+
+The use of Node.js and Express.js provides a modular backend, while MongoDB Atlas stores application records. Mongoose models support structured validation and database interaction. The event duplicate-prevention mechanism combines application-level checks with a MongoDB unique sparse index. The migration of legacy event records and the subsequent verification established that all 11 event records present at the time of testing had event keys and that the unique index was active. A duplicate event submission was rejected, and the event count remained unchanged.
+
+TextBee integration supports event announcements, attendance notifications, and coordinator bulk messages. SMS attempt logging improves traceability, while the external provider's quota and delivery constraints remain operational considerations. Overall, the project demonstrates the practical application of web technologies and database design to a real-world volunteer coordination problem.
+
+\section{Future Enhancements}
+The following enhancements can be considered:
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{Reliable notification queue:} Introduce an outbox or queue-based notification mechanism with retry policies, idempotency keys, and delivery-status reconciliation.
+  \item \textbf{Advanced reporting:} Generate event-wise, volunteer-wise, date-wise, and category-wise participation reports with PDF and spreadsheet export.
+  \item \textbf{Volunteer skill matching:} Recommend opportunities based on volunteer skills, interests, location, and availability.
+  \item \textbf{Attendance enhancements:} Add QR-code-based check-in, controlled late marking, and event-wise attendance summaries.
+  \item \textbf{Calendar integration:} Provide calendar views and optional calendar export for published events.
+  \item \textbf{Multilingual interface:} Extend Kannada and other regional-language support to the complete user interface.
+  \item \textbf{Analytics dashboard:} Present volunteer participation trends, event completion statistics, and engagement indicators.
+  \item \textbf{Deployment hardening:} Add production HTTPS, automated backups, structured monitoring, rate limiting, and security audits.
+  \item \textbf{Notification preferences:} Allow users to manage communication preferences and provide alternative channels such as email or in-app notifications.
+\end{enumerate}
+
+% =========================================================
+% REFERENCES
+% =========================================================
+\begin{thebibliography}{99}
+\addcontentsline{toc}{chapter}{REFERENCES}
+
+\bibitem{node}
+OpenJS Foundation, ``Node.js Documentation,'' \url{https://nodejs.org/docs/}.
+
+\bibitem{express}
+Express.js, ``Express - Node.js Web Application Framework,'' \url{https://expressjs.com/}.
+
+\bibitem{mongo}
+MongoDB, ``MongoDB Manual,'' \url{https://www.mongodb.com/docs/manual/}.
+
+\bibitem{atlas}
+MongoDB, ``MongoDB Atlas Documentation,'' \url{https://www.mongodb.com/docs/atlas/}.
+
+\bibitem{mongoose}
+Mongoose, ``Mongoose ODM Documentation,'' \url{https://mongoosejs.com/docs/}.
+
+\bibitem{html}
+WHATWG, ``HTML Living Standard,'' \url{https://html.spec.whatwg.org/}.
+
+\bibitem{mdn}
+Mozilla Developer Network, ``JavaScript Guide,'' \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide}.
+
+\bibitem{textbee}
+TextBee, ``TextBee SMS Gateway Documentation and Service Information,'' \url{https://textbee.dev/}. Accessed during project development.
+
+\bibitem{vtu}
+Visvesvaraya Technological University, Belagavi, official website and academic information, \url{https://vtu.ac.in/}.
+
+\end{thebibliography}
+
+% =========================================================
+% APPENDIX
+% =========================================================
+\appendix
+\chapter{SAMPLE CONFIGURATION AND PROJECT STRUCTURE}
+
+\section{Environment Configuration}
+The following is an illustrative list of configuration keys. Actual secret values must be maintained locally in the backend environment file and must not be included in a submitted report or source repository.
+
+\begin{lstlisting}[caption={Illustrative backend environment variables}]
+PORT=5013
+MONGODB_URI=<MONGODB_ATLAS_CONNECTION_STRING>
+JWT_SECRET=<LONG_RANDOM_SECRET>
+SMS_PROVIDER=textbee
+SMS_ENABLED=<TRUE_OR_FALSE>
+TEXTBEE_API_KEY=<TEXTBEE_API_KEY>
+TEXTBEE_DEVICE_ID=<TEXTBEE_DEVICE_ID>
+\end{lstlisting}
+
+\section{Illustrative Backend Organisation}
+The following is a logical representation of the backend components. The final submitted structure should be adjusted to match the actual project repository.
+
+\begin{lstlisting}[caption={Logical project structure}]
+backend/
+  models/
+    User.js
+    Event.js
+    EventRegistration.js
+    SMSLog.js
+  routes/
+    auth.js
+    events.js
+    registrations.js
+  middleware/
+    auth.js
+  services/
+    smsService.js
+  scripts/
+    migrate-event-keys.js
+    verify-event-keys.js
+  server.js
+\end{lstlisting}
+
+\section{Evidence to Attach in the Final Submission}
+The following screenshots may be inserted after capturing them from the running application:
+\begin{enumerate}
+  \item Login page and role-specific dashboard.
+  \item Volunteer event listing.
+  \item Event creation and update form.
+  \item Registration submission and administrative registration view.
+  \item Attendance management screen.
+  \item SMS log or notification administration screen.
+  \item MongoDB event documents and the unique \texttt{eventKey} index.
+  \item Duplicate event rejection message.
+\end{enumerate}
+
+To insert a screenshot, copy the image into the report folder and use:
+\begin{lstlisting}[language=TeX]
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{screenshots/event-dashboard.png}
+  \caption{Event management dashboard}
+\end{figure}
+\end{lstlisting}
+
+\chapter{PROJECT VERIFICATION SUMMARY}
+At the time of the recorded verification:
+\begin{itemize}
+  \item MongoDB Atlas connection was successful.
+  \item The database contained 11 event records.
+  \item Nine legacy event records were migrated with event keys.
+  \item No event records remained without an event key.
+  \item The unique sparse index named \texttt{eventKey\_1} was active.
+  \item A duplicate event submission was rejected and the total event count remained unchanged.
+  \item TextBee live testing was constrained by the provider's maximum daily message count.
+\end{itemize}
+
+\end{document}

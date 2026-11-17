@@ -6,6 +6,9 @@ const Event = require("../models/Event");
 const { requireAuth, authorizeRoles } = require("../middleware/auth");
 
 const router = express.Router();
+const User = require("../models/User");
+const SMSLog = require("../models/SMSLog");
+const { sendSMS } = require("../services/smsService");
 
 router.use(requireAuth);
 
@@ -30,6 +33,138 @@ const eventStatuses = [
     "Completed"
 ];
 
+
+// --------------------------------------------------
+// DUPLICATE EVENT KEY
+// --------------------------------------------------
+
+function createEventKey(title, eventDate, venue) {
+
+    const dateKey = getISTDateKey(eventDate);
+
+    const normalizedTitle = String(title || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+
+    const normalizedVenue = String(venue || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+
+    return [
+        dateKey,
+        normalizedTitle,
+        normalizedVenue
+    ].join("|");
+}
+
+
+function escapeRegex(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+
+// --------------------------------------------------
+// CHECK NEW AND LEGACY DUPLICATE EVENTS
+// --------------------------------------------------
+
+async function findDuplicateEvent({
+    eventKey,
+    title,
+    eventDate,
+    venue,
+    excludeId = null
+}) {
+
+    const normalizedTitle = String(title || "")
+        .trim()
+        .replace(/\s+/g, " ");
+
+    const normalizedVenue = String(venue || "")
+        .trim()
+        .replace(/\s+/g, " ");
+
+    // Determine the complete IST calendar-day range.
+    const dateKey = getISTDateKey(eventDate);
+
+    const dayStart = parseISTDate(dateKey);
+    const dayEnd = parseISTDate(dateKey, true);
+
+    // Allow different amounts of whitespace in legacy records.
+    const titlePattern = normalizedTitle
+        .split(/\s+/)
+        .map(escapeRegex)
+        .join("\\s+");
+
+    const venuePattern = normalizedVenue
+        .split(/\s+/)
+        .map(escapeRegex)
+        .join("\\s+");
+
+    const filter = {
+        $or: [
+            // Exact duplicate key for newer records.
+            { eventKey },
+
+            // Legacy records without eventKey.
+            {
+                eventDate: {
+                    $gte: dayStart,
+                    $lte: dayEnd
+                },
+                title: {
+                    $regex: `^${titlePattern}$`,
+                    $options: "i"
+                },
+                venue: {
+                    $regex: `^${venuePattern}$`,
+                    $options: "i"
+                }
+            }
+        ]
+    };
+
+    if (excludeId) {
+        filter._id = { $ne: excludeId };
+    }
+
+    return Event.findOne(filter)
+        .select("_id title eventDate venue");
+}
+
+
+// --------------------------------------------------
+// ATOMIC EVENT ANNOUNCEMENT
+// --------------------------------------------------
+
+async function claimAndAnnounceEvent(eventId, sentBy) {
+
+    const event = await Event.findOneAndUpdate(
+        {
+            _id: eventId,
+            status: "Published",
+            announcementClaimedAt: null
+        },
+        {
+            $set: {
+                announcementClaimedAt: new Date()
+            }
+        },
+        {
+            new: true
+        }
+    );
+
+    // Another request has already claimed this announcement.
+    if (!event) {
+        return false;
+    }
+
+    await announcePublishedEvent(event, sentBy);
+
+    return true;
+}
 // --------------------------------------------------
 // IST DATE HELPERS
 // --------------------------------------------------
@@ -308,6 +443,12 @@ router.post(
                 req.body.eventDate
             );
 
+            const eventKey = createEventKey(
+                req.body.title,
+                eventDate,
+                req.body.venue
+            );
+
             // Convert registration deadline to IST end of day.
             const registrationDeadline = parseISTDate(
                 req.body.registrationDeadline,
@@ -318,6 +459,23 @@ router.post(
                 return res.status(400).json({
                     success: false,
                     message: "Invalid event date or registration deadline."
+                });
+            }
+
+
+            // Check whether this event already exists.
+            const duplicateEvent = await findDuplicateEvent({
+                eventKey,
+                title: req.body.title,
+                eventDate,
+                venue: req.body.venue
+            });
+
+            if (duplicateEvent) {
+                return res.status(409).json({
+                    success: false,
+                    message: "A similar event already exists for this date and venue.",
+                    duplicateEventId: duplicateEvent._id
                 });
             }
 
@@ -354,9 +512,19 @@ router.post(
 
                 status: req.body.status || "Draft",
 
-                createdBy: req.user._id
+                createdBy: req.user._id,
+
+                eventKey
 
             });
+
+            // Send announcement only when the event is created as Published.
+            if (event.status === "Published") {
+                await claimAndAnnounceEvent(
+                    event._id,
+                    req.user._id
+                );
+            }
 
             return res.status(201).json({
                 success: true,
@@ -366,6 +534,12 @@ router.post(
 
         } catch (error) {
 
+            if (error.code === 11000) {
+                return res.status(409).json({
+                    success: false,
+                    message: "This event already exists. Duplicate creation prevented."
+                });
+            }
             console.error("Create event error:", error);
 
             return res.status(500).json({
@@ -683,6 +857,45 @@ router.patch(
                 );
             }
 
+            // Generate a duplicate-prevention key for the updated event.
+            const proposedEventDate =
+                updates.eventDate !== undefined
+                    ? updates.eventDate
+                    : event.eventDate;
+
+            const proposedTitle =
+                updates.title !== undefined
+                    ? updates.title
+                    : event.title;
+
+            const proposedVenue =
+                updates.venue !== undefined
+                    ? updates.venue
+                    : event.venue;
+
+            const proposedEventKey = createEventKey(
+                proposedTitle,
+                proposedEventDate,
+                proposedVenue
+            );
+
+            // Do not allow an update to create a duplicate event.
+            const duplicateEvent = await findDuplicateEvent({
+                eventKey: proposedEventKey,
+                title: proposedTitle,
+                eventDate: proposedEventDate,
+                venue: proposedVenue,
+                excludeId: event._id
+            });
+
+            if (duplicateEvent) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Another event with the same title, date and venue already exists."
+                });
+            }
+
+            updates.eventKey = proposedEventKey;
             // ------------------------------------------
             // VALIDATE THE COMPLETE PROPOSED EVENT
             // ------------------------------------------
@@ -706,11 +919,25 @@ router.patch(
             // SAVE VALIDATED UPDATES
             // ------------------------------------------
 
+            // Remember the status before applying updates.
+            const previousStatus = event.status;
+
             Object.assign(event, updates);
 
             event.updatedBy = req.user._id;
 
             await event.save();
+
+            // Send announcement only when the event becomes Published.
+            if (
+                previousStatus !== "Published" &&
+                event.status === "Published"
+            ) {
+                await claimAndAnnounceEvent(
+                    event._id,
+                    req.user._id
+                );
+            }
 
             return res.json({
                 success: true,
@@ -718,7 +945,18 @@ router.patch(
                 event
             });
 
-        } catch (error) {
+        }
+
+
+
+        catch (error) {
+
+            if (error.code === 11000) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Another event with the same title, date and venue already exists."
+                });
+            }
 
             console.error("Update event error:", error);
 
@@ -779,6 +1017,172 @@ router.delete(
     }
 );
 
+
+function formatEventDate(date, language = "en") {
+    return new Date(date).toLocaleDateString(
+        language === "kn" ? "kn-IN" : "en-IN",
+        {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+            timeZone: "Asia/Kolkata"
+        }
+    );
+}
+
+async function sendAndLogEventSMS(recipients, message, sentBy) {
+    try {
+        const result = await sendSMS(recipients, message);
+
+        try {
+            await SMSLog.create({
+                recipients,
+                message,
+                type: "Announcement",
+                status: result.success ? "Accepted" : "Failed",
+                smsBatchId: result.smsBatchId || null,
+                errorMessage: result.success
+                    ? ""
+                    : result.error || "SMS failed",
+                recipientCount: recipients.length,
+                sentBy: sentBy || null
+            });
+        } catch (logError) {
+            console.error(
+                "Event SMS log creation failed:",
+                logError.message
+            );
+        }
+
+        return result;
+
+    } catch (error) {
+        console.error("Event announcement failed:", error.message);
+
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
+
+async function announcePublishedEvent(event, sentBy) {
+    try {
+        // Announcements are restricted to Published events.
+        if (event.status !== "Published") {
+            return;
+        }
+
+        // Retrieve all active coordinators and volunteers.
+        const users = await User.find({
+            role: {
+                $in: ["coordinator", "volunteer"]
+            },
+            isActive: true
+        })
+            .select("phone preferredLanguage")
+            .sort({ createdAt: 1, _id: 1 })
+            .lean();
+
+        // Deduplicate phone numbers across all accounts.
+        const seenPhones = new Set();
+
+        const recipientsByLanguage = {
+            en: [],
+            kn: []
+        };
+
+        for (const user of users) {
+            const phone = String(user.phone || "").trim();
+
+            if (!/^\+?\d{8,15}$/.test(phone)) {
+                continue;
+            }
+
+            if (seenPhones.has(phone)) {
+                continue;
+            }
+
+            seenPhones.add(phone);
+
+            const language = user.preferredLanguage === "kn"
+                ? "kn"
+                : "en";
+
+            recipientsByLanguage[language].push(phone);
+        }
+
+        const eventDate = formatEventDate(event.eventDate, "en");
+        const deadline = formatEventDate(
+            event.registrationDeadline,
+            "en"
+        );
+
+        // English announcement.
+        if (recipientsByLanguage.en.length > 0) {
+            const message = [
+                `NEW VOLUNTEER OPPORTUNITY`,
+                `Event: ${event.title}`,
+                `Date: ${eventDate}`,
+                `Time: ${event.startTime} - ${event.endTime}`,
+                `Venue: ${event.venue}`,
+                `Registration Deadline: ${deadline}`,
+                `To participate, log in to the NGO Volunteer Management System and register for this event.`,
+                `Thank you.`
+            ].join("\n");
+
+            await sendAndLogEventSMS(
+                recipientsByLanguage.en,
+                message,
+                sentBy
+            );
+        }
+
+        // Kannada announcement.
+        if (recipientsByLanguage.kn.length > 0) {
+            const kannadaDate = formatEventDate(
+                event.eventDate,
+                "kn"
+            );
+
+            const kannadaDeadline = formatEventDate(
+                event.registrationDeadline,
+                "kn"
+            );
+
+            const eventTitle = event.titleKannada || event.title;
+
+            const message = [
+                `ಹೊಸ ಸ್ವಯಂಸೇವಕರ ಅವಕಾಶ`,
+                `ಕಾರ್ಯಕ್ರಮ: ${eventTitle}`,
+                `ದಿನಾಂಕ: ${kannadaDate}`,
+                `ಸಮಯ: ${event.startTime} - ${event.endTime}`,
+                `ಸ್ಥಳ: ${event.venue}`,
+                `ನೋಂದಣಿಯ ಕೊನೆಯ ದಿನಾಂಕ: ${kannadaDeadline}`,
+                `ಭಾಗವಹಿಸಲು NGO Volunteer Management System ಗೆ ಲಾಗಿನ್ ಮಾಡಿ ಮತ್ತು ಈ ಕಾರ್ಯಕ್ರಮಕ್ಕೆ ನೋಂದಾಯಿಸಿಕೊಳ್ಳಿ.`,
+                `ಧನ್ಯವಾದಗಳು.`
+            ].join("\n");
+
+            await sendAndLogEventSMS(
+                recipientsByLanguage.kn,
+                message,
+                sentBy
+            );
+        }
+
+        console.log(
+            `Event announcement processed: ${event.title}. ` +
+            `Unique recipients: ${seenPhones.size}`
+        );
+
+    } catch (error) {
+        // Notification failures must never undo event creation.
+        console.error(
+            "Published event notification error:",
+            error.message
+        );
+    }
+}
 
 // --------------------------------------------------
 // EXPORT ROUTER
